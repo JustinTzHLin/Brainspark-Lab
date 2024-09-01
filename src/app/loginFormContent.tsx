@@ -7,7 +7,7 @@ import Email from './loginFormContent/email';
 import Password from './loginFormContent/password';
 
 const LogInFormContent = () => {
-  const BACKEND_URL = process.env.BACKEND_URLs || 'http://localhost:8000';
+  const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
