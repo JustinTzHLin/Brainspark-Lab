@@ -1,4 +1,5 @@
 # Brainspark-Lab
+This is the frontend repository of Brainspark-Lab. To view the backend, please visit [here](https://github.com/JustinTzHLin/Brainspark-Lab-Backend).
 
 
 ## Table of Contents
@@ -29,28 +30,7 @@ Brainspark-Lab is built with:
 
 
 ## Getting Started With Brainspark-Lab
-1. Fork and clone this repository then open it on your code editor of choice.
-2. Setup the .env file
-   - You will need to add your own JSON Web Token (JWT) secret key for security purposes: https://jwt.io/
-   - You will need to set up your own Next Auth URL and secret key for security purposes: https://next-auth.js.org/configuration/options
-   - You will need to add your own Gemini Api Key for AI features: https://ai.google.dev/gemini-api/docs/api-key
-   - Optional: If you would prefer to use Google OAuth for your login, please fill in the corresponding ID and Secret Key in the .env file as well.
-3. Set up the application by running the below command:
-```
-npm install
-npm run build
-```
-4. Activate the Frontend and the Backend server by running the following commands in separate terminals:
-```
-npm start
-```
-```
-npm run prod
-```
-5. Visit localhost:3000, create an account or log in to store your result, or play as guest.
-6. Select your preferences for the quiz, including the number of questions, category, difficulty level, and question type.
-7. Click the Gemini button to receive an AI-generated explanation for the question.
-8. Enjoy!
+Visit https://brainspark-lab-frontend.vercel.app/ and have fun!
 
 
 ## License
