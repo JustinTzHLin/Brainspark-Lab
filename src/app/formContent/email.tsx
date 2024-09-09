@@ -13,7 +13,7 @@ interface EmailProps {
 const Email: React.FC<EmailProps> = ({ setEmail, isEmailEmpty, setEmailEmpty }) => {
   
   return (
-    <FormControl mt={6} isInvalid={isEmailEmpty}>
+    <FormControl mt={6} isRequired isInvalid={isEmailEmpty}>
       <FormLabel color='teal.300'>Email (Required for Sign up)</FormLabel>
       <InputGroup>
         <InputLeftElement pointerEvents='none'>
