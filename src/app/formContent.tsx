@@ -36,7 +36,7 @@ const FormContent = () => {
         try {
           const tokenConfirmResult = await axios.post(BACKEND_URL + '/user/tokenConfirm', {token}, {withCredentials: true});
           console.log(tokenConfirmResult);
-          setEmail(tokenConfirmResult.data.email);
+          setEmail(tokenConfirmResult.data.useremail);
           dispatch(replaceStatus('signup'));
           dispatch(replaceAction('signup'));
         } catch (err: any) {
