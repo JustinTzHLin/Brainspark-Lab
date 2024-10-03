@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Stack, Box, Button, Text, Link, useToast, useDisclosure } from '@chakra-ui/react';
 import axios from 'axios';
-import Email from './formContent/email';
-import Password from './formContent/password';
-import Username from './formContent/username';
-import SignupConfirmAlert from '@/formContent/signupConfirmModel';
+import Email from '../components/formContent/email';
+import Password from '../components/formContent/password';
+import Username from '../components/formContent/username';
+import SignupConfirmAlert from '../components/formContent/signupConfirmModel';
 import { useAppSelector } from '@/lib/hooks';
 import { useAppDispatch } from '@/lib/hooks';
 import validator from 'validator';
@@ -22,7 +22,7 @@ const FormContent = () => {
   const [isUsernameEmpty, setUsernameEmpty] = useState(false);
   const router = useRouter();
   const toast = useToast();
-  const { currentAction, status } = useAppSelector(state => state.login.loginObject);
+  const { currentAction, currentStatus } = useAppSelector(state => state.login.loginObject);
   const dispatch = useAppDispatch();
   const searchParamas = useSearchParams();
 
@@ -37,7 +37,7 @@ const FormContent = () => {
           const tokenConfirmResult = await axios.post(BACKEND_URL + '/user/tokenConfirm', {token}, {withCredentials: true});
           console.log(tokenConfirmResult);
           setEmail(tokenConfirmResult.data.useremail);
-          dispatch(replaceStatus('signup'));
+          dispatch(replaceStatus('initial_registration'));
           dispatch(replaceAction('signup'));
         } catch (err: any) {
           console.log('LoginForm fetch /tokenConfirm: Error: ', err);
@@ -71,7 +71,7 @@ const FormContent = () => {
   const handleContinue = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
-    if (status === 'email') {
+    if (currentStatus === 'email_input') {
       // Check inputs are not empty 
       if (!email) setEmailEmpty(true);
       if (email) {
@@ -110,7 +110,7 @@ const FormContent = () => {
                 });
                 dispatch(replaceAction('login'));
               } else if (currentAction === 'login') {
-                dispatch(replaceStatus('password'));
+                dispatch(replaceStatus('password_input'));
               }
             }
           } else {
@@ -137,7 +137,7 @@ const FormContent = () => {
             });
         }
       }
-    } else if (status === 'password') {
+    } else if (currentStatus === 'password_input') {
       if (!password) setPasswordEmpty(true);
       if (password) {
         console.log('start login');
@@ -173,7 +173,7 @@ const FormContent = () => {
           }
         }
       }
-    } else if (status === 'signup') {
+    } else if (currentStatus === 'initial_registration') {
       // Check inputs are not empty 
       if (!password) setPasswordEmpty(true);
       if (!username) setUsernameEmpty(true);
@@ -233,9 +233,9 @@ const FormContent = () => {
 
         {/* Email Input */}
         {
-          status === 'email' ? <Email setEmail={setEmail} isEmailEmpty={isEmailEmpty} setEmailEmpty={setEmailEmpty} />
-            : status === 'password' ? <Password setPassword={setPassword} isPasswordEmpty={isPasswordEmpty} setPasswordEmpty={setPasswordEmpty} showPassword={showPassword} handleView={() => {setShowPassword(!showPassword)}} />
-            : status === 'signup' ? <>
+          currentStatus === 'email_input' ? <Email setEmail={setEmail} isEmailEmpty={isEmailEmpty} setEmailEmpty={setEmailEmpty} />
+            : currentStatus === 'password_input' ? <Password setPassword={setPassword} isPasswordEmpty={isPasswordEmpty} setPasswordEmpty={setPasswordEmpty} showPassword={showPassword} handleView={() => {setShowPassword(!showPassword)}} />
+            : currentStatus === 'initial_registration' ? <>
               <Username setUsername={setUsername} isUsernameEmpty={isUsernameEmpty} setUsernameEmpty={setUsernameEmpty} />
               <Password setPassword={setPassword} isPasswordEmpty={isPasswordEmpty} setPasswordEmpty={setPasswordEmpty} showPassword={showPassword} handleView={() => {setShowPassword(!showPassword)}} />
             </> : null
@@ -249,7 +249,7 @@ const FormContent = () => {
         <Stack pt={6}>
           <Text align={'center'} onClick={() => {
             dispatch(replaceAction(currentAction === 'signup' ? 'login' : 'signup'))
-            dispatch(replaceStatus('email'));
+            dispatch(replaceStatus('email_input'));
           }}
             _hover={{ cursor: 'pointer' }}>
             Don’t have an account? <Link color={'teal.500'}>{currentAction === 'signup' ? 'Login' : 'Sign Up'}</Link>

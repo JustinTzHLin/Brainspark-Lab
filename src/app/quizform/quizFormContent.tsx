@@ -1,8 +1,8 @@
 import { Box, Button } from '@chakra-ui/react';
-import NumberOfQuestions from './quizFormContent/numberOfQuestions';
-import Category from './quizFormContent/category';
-import QuestionType from './quizFormContent/questiontype';
-import Difficulty from './quizFormContent/difficulty';
+import NumberOfQuestions from '../../components/quizFormContent/numberOfQuestions';
+import Category from '../../components/quizFormContent/category';
+import QuestionType from '../../components/quizFormContent/questiontype';
+import Difficulty from '../../components/quizFormContent/difficulty';
 
 interface QuizFormContentProps {
   questionNumber: number,
