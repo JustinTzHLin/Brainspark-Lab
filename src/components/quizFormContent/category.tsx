@@ -1,14 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Flex, FormControl, FormLabel, Input, InputGroup, InputLeftElement, Icon, Select, Button, Text,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
+  Flex, FormControl, FormLabel, Icon, Button, Center, Menu, MenuButton, MenuList, MenuItem
 } from '@chakra-ui/react';
 import { BiSolidCategoryAlt  } from "react-icons/bi";
 import { ChevronDownIcon } from '@chakra-ui/icons';
@@ -51,20 +43,17 @@ const Category: React.FC<CategoryProps> = ({ setCategory }) => {
     <FormControl mt={6}>
       <FormLabel color='teal.300'>Category</FormLabel>
       <Flex>
-        <InputGroup width='2.5rem' zIndex='10'>
-          <InputLeftElement pointerEvents='none'>
-            <Icon boxSize={5} color='teal.300' as={BiSolidCategoryAlt }/>
-          </InputLeftElement>
-          <Input width='0rem' pr='0' />
-        </InputGroup>
+        <Center width='2.75rem' borderColor='gray.200' borderWidth='1px' borderRadius='0.375rem'>
+          <Icon boxSize={5} color='teal.300' as={BiSolidCategoryAlt }/>
+        </Center>
         <Menu>
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} w='100%' bg='white' fontWeight={'normal'}
-            borderWidth='2px' borderColor='white' _focus={{ bg: 'white' }}
+          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} w="100%" bg='white' fontWeight={'normal'}
+            borderWidth='1px' borderColor='gray.200' _focus={{ bg: 'white' }}
             _hover={{ borderColor: 'teal.300' }} _expanded={{ borderColor: 'teal.300', bg: 'white' }}
           >
             {categoryDisplay}
           </MenuButton>
-          <MenuList overflowY="auto" h="200px" w='27.5rem'>
+          <MenuList overflowY="scroll" h="200px" w='27.5rem'>
             {categories.map((categoryObj) => (<MenuItem key={'categoryOption'+categoryObj.value} value={categoryObj.value} onClick={() => {setCategory(categoryObj.value); setCategoryDisplay(categoryObj.label);}}>{categoryObj.label}</MenuItem>))}
           </MenuList>
         </Menu>

@@ -252,7 +252,7 @@ const FormContent = () => {
             dispatch(replaceStatus('email_input'));
           }}
             _hover={{ cursor: 'pointer' }}>
-            Don’t have an account? <Link color={'teal.500'}>{currentAction === 'signup' ? 'Login' : 'Sign Up'}</Link>
+            {currentAction === 'signup' ? 'Already have an account?' : "Don’t have an account?"} <Link color={'teal.500'}>{currentAction === 'signup' ? 'Login' : 'Sign Up'}</Link>
           </Text>
         </Stack>
 

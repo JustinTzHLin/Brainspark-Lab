@@ -1,11 +1,11 @@
 'use client';
 import React, { useRef, useState } from 'react';
+import he from 'he';
 import { useAppSelector } from '@/lib/hooks';
 import {
-  Flex, Spacer, Box, Heading, Stack, Center, Badge, Button, ButtonGroup, IconButton, useDisclosure, Icon, StackDivider, Text, Skeleton, SkeletonText,
-  Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, PopoverFooter, PopoverArrow, PopoverCloseButton,
-  Tag, TagLabel, TagLeftIcon, TagRightIcon, TagCloseButton, Progress,
-  Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer,
+  Flex, Spacer, Box, Heading, Stack, Center, Badge, Button, IconButton, useDisclosure, StackDivider, Text, Skeleton, SkeletonText,
+  Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, PopoverArrow, PopoverCloseButton, Progress,
+  Table, Tbody, Tr, Td, TableContainer,
   Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
 } from '@chakra-ui/react';
 import Image from 'next/image';
@@ -47,7 +47,6 @@ const Quiz = () => {
   const [currentAnswer, setCurrentAnswer] = useState('');
   const [userAnswers, setUserAnswers] = useState<string[]>(Array(questionNumber).fill(''));
   const [correctCount, setCorrectCount] = useState(0);
-  const [previousBtnDisabled, setPreviousBtnDisabled] = useState(true);
   const [geminiContentObj, setGeminiContentObj] = useState<{
     correctAnswer: string,
     incorrectAnswers: string[],
@@ -75,7 +74,6 @@ const Quiz = () => {
   const handleNextQuestion = () => {
     console.log('handle next question');
     console.log(userAnswers);
-    setPreviousBtnDisabled(false);
     if (currentAnswer) {
       console.log(currentAnswer);
       setCurrentAnswer(userAnswers[quizIndex+1] || '');
@@ -107,7 +105,6 @@ const Quiz = () => {
       if (newOptions[i] === userAnswers[quizIndex-1]) handleSelectedChoice(i);
     }
     setCurrentAnswer(userAnswers[quizIndex-1]);
-    if (quizIndex === 1) setPreviousBtnDisabled(true);
   }
 
   // Check and store answers process
@@ -298,29 +295,25 @@ const Quiz = () => {
         </Flex>
         <Center my={4} textAlign="left" width='full' bg='orange.500' py={3} pl={3.5} pr={3.5} borderRadius={10}>
           <Box textAlign="left" w='30rem' bg='white' p={2} borderRadius={6} h='8rem'>
-            <b>{quiz.question}</b>
+            <b>{he.decode(quiz.question)}</b>
           </Box>
         </Center>
+        {
+          Array.from({length: options.length}).map((_, i) => {
+            return (
+              <Button
+                key={'quiz_option_'+i} width='full' my={2} fontSize={20} boxShadow={buttonBorderColor[i]}
+                height={options.length === 4 ? '48px' : '112px'}
+                colorScheme={['whatsapp', 'twitter', 'purple', 'pink'][i]}
+                _active={{transform: 'scale(0.9)'}} onClick={() => selectOption(i)}
+              >
+                <b>{he.decode(options[i])}</b>
+              </Button>
+            )
+          })
+        }
         <Flex width='full' my={8} align="center" justifyContent="center">
-          <Button height='48px' width='48.5%' fontSize={20} boxShadow={buttonBorderColor[0]} colorScheme='whatsapp' _active={{transform: 'scale(0.9)'}} onClick={() => selectOption(0)}>
-            <b>{options[0]}</b>
-          </Button>
-          <Spacer />
-          <Button height='48px' width='48.5%' fontSize={20} boxShadow={buttonBorderColor[1]} colorScheme='twitter'_active={{transform: 'scale(0.9)'}} onClick={() => selectOption(1)}>
-            <b>{options[1]}</b>
-          </Button>
-        </Flex>
-        <Flex width='full' my={8} align="center" justifyContent="center">
-          <Button height='48px' width='48.5%' fontSize={20} boxShadow={buttonBorderColor[2]} colorScheme='purple' _active={{transform: 'scale(0.9)'}} onClick={() => selectOption(2)}>
-            <b>{options[2]}</b>
-          </Button>
-          <Spacer />
-          <Button height='48px' width='48.5%' fontSize={20} boxShadow={buttonBorderColor[3]} colorScheme='pink' _active={{transform: 'scale(0.9)'}} onClick={() => selectOption(3)}>
-            <b>{options[3]}</b>
-          </Button>
-        </Flex>
-        <Flex width='full' my={8} align="center" justifyContent="center">
-          <IconButton isDisabled={previousBtnDisabled} aria-label='Previous Question' borderRightRadius={0} height='48px' width='50%' fontSize={20} colorScheme='gray' icon={<BiSolidLeftArrow />} _active={{transform: 'scale(0.9)'}} onClick={() => handlePreviousQuestion()} />
+          <IconButton isDisabled={quizIndex === 0} aria-label='Previous Question' borderRightRadius={0} height='48px' width='50%' fontSize={20} colorScheme='gray' icon={<BiSolidLeftArrow />} _active={{transform: 'scale(0.9)'}} onClick={() => handlePreviousQuestion()} />
           <IconButton aria-label='Next Question' borderLeftRadius={0} height='48px' width='50%' fontSize={20} colorScheme='gray' icon={<BiSolidRightArrow />} _active={{transform: 'scale(0.9)'}} onClick={() => handleNextQuestion()} />
         </Flex>
       </Box>

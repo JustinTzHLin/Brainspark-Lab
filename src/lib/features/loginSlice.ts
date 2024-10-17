@@ -10,7 +10,7 @@ export interface loginState {
 const initialState: loginState = {
   loginObject: {
     currentAction: 'login', // login || signup
-    currentStatus: 'email' // email_input || password_inut || initial_registration
+    currentStatus: 'email_input' // email_input || password_inut || initial_registration
   },
 }
 

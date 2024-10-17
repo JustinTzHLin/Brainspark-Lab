@@ -1,5 +1,5 @@
 import {
-  Box, Stack, FormControl, FormLabel, FormErrorMessage, Input, InputGroup, InputLeftElement, Icon, Checkbox,
+  Box, Stack, FormControl, FormLabel, Icon, Checkbox, Center, Flex
 } from '@chakra-ui/react';
 import { BsUiRadios } from "react-icons/bs";
 
@@ -12,11 +12,10 @@ const QuestionType: React.FC<QuestionTypeProps> = ({ questionTypes, setQuestionT
   return (
     <FormControl mt={6}>
       <FormLabel color='teal.300'>Question Type</FormLabel>
-      <InputGroup>
-        <InputLeftElement pointerEvents='none'>
-          <Icon boxSize={5} color='teal.300' as={BsUiRadios} />
-        </InputLeftElement>
-        <Input width='0rem' pr='0' />
+      <Flex>
+        <Center width='2.75rem' borderColor='gray.200' borderWidth='1px' borderRadius='0.375rem'>
+          <Icon boxSize={5} color='teal.300' as={BsUiRadios }/>
+        </Center>
         <Box borderWidth='1px' borderRadius='md' p={1.5} width='100%'>
           <Stack direction='row' spacing={10} ml={3} >
             <Checkbox colorScheme='teal' isChecked={questionTypes[0]} onChange={() => setQuestionTypes([true, false, false])}>
@@ -30,8 +29,7 @@ const QuestionType: React.FC<QuestionTypeProps> = ({ questionTypes, setQuestionT
             </Checkbox>
           </Stack>
         </Box>
-      </InputGroup>
-      <FormErrorMessage>Password is required.</FormErrorMessage>
+      </Flex>
     </FormControl>
   )
 }
