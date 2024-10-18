@@ -20,6 +20,7 @@ const FormContent = () => {
   const [isPasswordEmpty, setPasswordEmpty] = useState(false);
   const [username, setUsername] = useState('');
   const [isUsernameEmpty, setUsernameEmpty] = useState(false);
+  const [btnIsLoading, setBtnIsLoading] = useState(false);
   const router = useRouter();
   const toast = useToast();
   const { currentAction, currentStatus } = useAppSelector(state => state.login.loginObject);
@@ -75,12 +76,14 @@ const FormContent = () => {
       // Check inputs are not empty 
       if (!email) setEmailEmpty(true);
       if (email) {
+        setBtnIsLoading(true);
         console.log('start sign in');
         try {
 
           // Sign in process
           if (validator.isEmail(email)) {
             const loginResult = await axios.post(BACKEND_URL + '/user/emailConfirm', {email}, {withCredentials: true});
+            setBtnIsLoading(false);
             console.log(loginResult);
             if (loginResult.data.result === 'email_not_existed') {
               if (currentAction === 'signup') {
@@ -114,6 +117,7 @@ const FormContent = () => {
               }
             }
           } else {
+            setBtnIsLoading(false);
             toast({
               position: 'top',
               title: 'Email Not Valid',
@@ -126,6 +130,7 @@ const FormContent = () => {
 
         } // Handle error in specific case
           catch (err: any) {
+            setBtnIsLoading(false);
             console.log('LoginForm fetch /confirmEmail: Error: ', err);
             toast({
               position: 'top',
@@ -140,6 +145,7 @@ const FormContent = () => {
     } else if (currentStatus === 'password_input') {
       if (!password) setPasswordEmpty(true);
       if (password) {
+        setBtnIsLoading(true);
         console.log('start login');
         try {
 
@@ -147,9 +153,10 @@ const FormContent = () => {
           const loginResult = await axios.post(BACKEND_URL + '/user/signIn', {password, email}, {withCredentials: true});
           console.log(loginResult);
           router.push('/quizform');
-  
+
         } // Handle error in specific case
           catch (err: any) {
+          setBtnIsLoading(false);
           console.log('LoginForm fetch /signIn: Error: ', err);
           if (err.response.data.type === 'user_not_found' || err.response.data.type === 'invalid_credentials') {
             toast.closeAll();
@@ -190,14 +197,17 @@ const FormContent = () => {
 
       // Sign up process
       if(password && username && email) {
+        setBtnIsLoading(true);
         console.log('start sign up');
         try {
           const signUpResult = await axios.post(BACKEND_URL + '/user/signUp', {username, password, email}, {withCredentials: true});
+          setBtnIsLoading(false);
           console.log(signUpResult);
           router.push('/quizform');
 
         } // Handle error in specific case
           catch (err: any) {
+          setBtnIsLoading(false);
           console.log('LoginForm fetch /signUp: Error: ', err);
           if (err.response.data.type === 'email_already_exists') {
             toast.closeAll();
@@ -242,7 +252,10 @@ const FormContent = () => {
         }
 
         {/* Submit Button */}
-        <Button color='white' _hover={{ bg: 'teal' }} bg='teal.300' border='1px' borderColor='#ccd0d5' width="full" mt={4} type="submit" onClick={handleContinue}>
+        <Button
+          color='white' _hover={{ bg: 'teal' }} bg='teal.300' border='1px' borderColor='#ccd0d5' width="full" mt={4} type="submit" onClick={handleContinue}
+          isLoading={btnIsLoading}
+        >
           Continue
         </Button>
 
