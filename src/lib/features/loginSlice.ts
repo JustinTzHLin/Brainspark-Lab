@@ -3,14 +3,14 @@ import { createSlice, PayloadAction, Slice } from '@reduxjs/toolkit';
 export interface loginState {
   loginObject: {
     currentAction: string,
-    status: string,
+    currentStatus: string,
   }
 }
 
 const initialState: loginState = {
   loginObject: {
-    currentAction: 'login',
-    status: 'email'
+    currentAction: 'login', // login || signup
+    currentStatus: 'email_input' // email_input || password_inut || initial_registration
   },
 }
 
@@ -22,7 +22,7 @@ export const loginSlice: Slice<loginState> = createSlice({
       state.loginObject.currentAction = action.payload
     },
     replaceStatus: (state, action: PayloadAction<string>) => {
-      state.loginObject.status = action.payload
+      state.loginObject.currentStatus = action.payload
     },
   },
 })

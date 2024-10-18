@@ -14,7 +14,7 @@ const Email: React.FC<EmailProps> = ({ setEmail, isEmailEmpty, setEmailEmpty }) 
   
   return (
     <FormControl mt={6} isRequired isInvalid={isEmailEmpty}>
-      <FormLabel color='teal.300'>Email (Required for Sign up)</FormLabel>
+      <FormLabel color='teal.300'>Email</FormLabel>
       <InputGroup>
         <InputLeftElement pointerEvents='none'>
           <EmailIcon color='teal.300' />

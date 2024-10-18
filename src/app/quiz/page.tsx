@@ -1,11 +1,10 @@
 'use client';
 import React, { useRef, useState } from 'react';
+import he from 'he';
 import { useAppSelector } from '@/lib/hooks';
 import {
-  Flex, Spacer, Box, Heading, Stack, Center, Badge, Button, ButtonGroup, IconButton, useDisclosure, Icon, StackDivider, Text, Skeleton, SkeletonText,
-  Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, PopoverFooter, PopoverArrow, PopoverCloseButton,
-  Tag, TagLabel, TagLeftIcon, TagRightIcon, TagCloseButton, Progress,
-  Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer,
+  Flex, Spacer, Box, Heading, Stack, Center, Badge, Button, IconButton, useDisclosure, StackDivider, Text, Skeleton, SkeletonText,
+  Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, PopoverArrow, PopoverCloseButton, Progress,
   Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
 } from '@chakra-ui/react';
 import Image from 'next/image';
@@ -44,10 +43,8 @@ const Quiz = () => {
     return array;
   }
   const [options, setOptions] = useState(shuffleArray(quiz.correct_answer ? [quiz.correct_answer].concat(quiz.incorrect_answers) : []));
-  const [currentAnswer, setCurrentAnswer] = useState('');
   const [userAnswers, setUserAnswers] = useState<string[]>(Array(questionNumber).fill(''));
   const [correctCount, setCorrectCount] = useState(0);
-  const [previousBtnDisabled, setPreviousBtnDisabled] = useState(true);
   const [geminiContentObj, setGeminiContentObj] = useState<{
     correctAnswer: string,
     incorrectAnswers: string[],
@@ -67,47 +64,23 @@ const Quiz = () => {
   // Handle select option process
   const selectOption = (index: number) => {
     handleSelectedChoice(index);
-    setCurrentAnswer(options[index]);
     setUserAnswers(userAnswers.toSpliced(quizIndex, 1, options[index]));
   }
 
-  // Handle click next question button
-  const handleNextQuestion = () => {
-    console.log('handle next question');
+  // Handle click quiz status button
+  const handleChangeQuestion = (questionIndex: number) => {
+    console.log('handle change question');
     console.log(userAnswers);
-    setPreviousBtnDisabled(false);
-    if (currentAnswer) {
-      console.log(currentAnswer);
-      setCurrentAnswer(userAnswers[quizIndex+1] || '');
-      if (quizIndex + 1 < questionNumber) {
-        setQuizIndex(quizIndex+1);
-        setQuiz(data[quizIndex+1]);
-        setButtonBorderColor(['0px 0px 0px 0px #DD6B20 inset', '0px 0px 0px 0px #DD6B20 inset', '0px 0px 0px 0px #DD6B20 inset', '0px 0px 0px 0px #DD6B20 inset']);
-        const newOptions = shuffleArray([data[quizIndex+1].correct_answer].concat(data[quizIndex+1].incorrect_answers));
-        setOptions(newOptions);
-        for (let i = 0; i < newOptions.length; i++) {
-          if (newOptions[i] === userAnswers[quizIndex+1]) handleSelectedChoice(i);
-        }
-      } else submitAnswerOpen();
-    } else {
-      console.log('empty answer');
-      answerEmptyOpen();
-    }
-  }
-
-  // Handle click previous question button
-  const handlePreviousQuestion = () => {
-    console.log('handle previous question');
-    console.log(userAnswers);
-    setQuizIndex(quizIndex-1);
-    setQuiz(data[quizIndex-1]);
-    const newOptions = shuffleArray([data[quizIndex-1].correct_answer].concat(data[quizIndex-1].incorrect_answers));
-    setOptions(newOptions);
-    for (let i = 0; i < newOptions.length; i++) {
-      if (newOptions[i] === userAnswers[quizIndex-1]) handleSelectedChoice(i);
-    }
-    setCurrentAnswer(userAnswers[quizIndex-1]);
-    if (quizIndex === 1) setPreviousBtnDisabled(true);
+    if (questionIndex < questionNumber) {
+      setQuizIndex(questionIndex);
+      setQuiz(data[questionIndex]);
+      setButtonBorderColor(['0px 0px 0px 0px #DD6B20 inset', '0px 0px 0px 0px #DD6B20 inset', '0px 0px 0px 0px #DD6B20 inset', '0px 0px 0px 0px #DD6B20 inset']);
+      const newOptions = shuffleArray([data[questionIndex].correct_answer].concat(data[questionIndex].incorrect_answers));
+      setOptions(newOptions);
+      for (let i = 0; i < newOptions.length; i++) {
+        if (newOptions[i] === userAnswers[questionIndex]) handleSelectedChoice(i);
+      }
+    } else submitAnswerOpen();
   }
 
   // Check and store answers process
@@ -183,6 +156,8 @@ const Quiz = () => {
 
   const { isOpen: geminiModalIsOpen, onOpen: geminiModalOpen, onClose: geminiModalClose } = useDisclosure();
 
+  const { isOpen: questionStatusIsOpen, onOpen: questionStatusOpen, onClose: questionStatusClose } = useDisclosure();
+
   return (
     <Flex width="full" align="center" justifyContent="center" p={8} h="100vh">
       <Box p={8} width="510px" borderWidth={1} borderRadius={8} boxShadow="lg">
@@ -246,7 +221,7 @@ const Quiz = () => {
             <Heading color='orange.500'>Quiz {quizIndex+1}/{questionNumber}</Heading>
           </Box>
           <Box textAlign="right" pl='10%'>
-            <Popover>
+            <Popover placement='bottom-end' isOpen={questionStatusIsOpen} onClose={questionStatusClose} onOpen={questionStatusOpen}>
               <PopoverTrigger>
                 <IconButton
                   aria-label="Info"
@@ -256,33 +231,25 @@ const Quiz = () => {
                   isRound={true}
                 />
               </PopoverTrigger>
-              <PopoverContent textAlign="left">
+              <PopoverContent textAlign="left" w='445px'>
                 <PopoverArrow />
                 <PopoverCloseButton />
-                <PopoverHeader textAlign='center' fontSize={24}><b>Quiz Form Results</b></PopoverHeader>
+                <PopoverHeader textAlign='center' fontSize={24} color='teal.500'><b>Quiz Status</b></PopoverHeader>
                 <PopoverBody>
-                  <TableContainer>
-                    <Table variant='simple' fontSize={18}>
-                      <Tbody height='10px'>
-                        <Tr >
-                          <Td pl='5px' pr='5px' textAlign='left' color='gray.600'><b>Question Number</b></Td>
-                          <Td pl='5px' pr='5px' textAlign='left' color='purple.500' width='10px'><b>{questionNumber}</b></Td>
-                        </Tr>
-                        <Tr>
-                          <Td pl='5px' pr='5px' textAlign='left' color='gray.600'><b>Category</b></Td>
-                          <Td pl='5px' pr='5px' textAlign='left' color='green.500'><b>{category.toUpperCase()}</b></Td>
-                        </Tr>
-                        <Tr>
-                          <Td pl='5px' pr='5px' textAlign='left' color='gray.600'><b>Difficulty</b></Td>
-                          <Td pl='5px' pr='5px' textAlign='left' color='red.500'><b>{difficulty.toUpperCase()}</b></Td>
-                        </Tr>
-                        <Tr>
-                          <Td pl='5px' pr='5px' textAlign='left' color='gray.600'><b>Question Type</b></Td>
-                          <Td pl='5px' pr='5px' textAlign='left' color='blue.500'><b>{questionType.toUpperCase()}</b></Td>
-                        </Tr>
-                      </Tbody>
-                    </Table>
-                  </TableContainer>
+                  <Center>
+                    <Box w='416px'>
+                      {userAnswers.map((userAnswer, i) => {
+                        return (
+                          <Button
+                            w='40px' key={'quizStatusButton' + i} m='6px' onClick={() => {handleChangeQuestion(i); questionStatusClose();}}
+                            colorScheme={userAnswer === '' ? 'gray' : 'teal'}
+                          >
+                            {i+1}
+                          </Button>
+                        )
+                      })}
+                    </Box>
+                  </Center>
                 </PopoverBody>
               </PopoverContent>
             </Popover>
@@ -298,30 +265,26 @@ const Quiz = () => {
         </Flex>
         <Center my={4} textAlign="left" width='full' bg='orange.500' py={3} pl={3.5} pr={3.5} borderRadius={10}>
           <Box textAlign="left" w='30rem' bg='white' p={2} borderRadius={6} h='8rem'>
-            <b>{quiz.question}</b>
+            <b>{he.decode(quiz.question)}</b>
           </Box>
         </Center>
+        {
+          Array.from({length: options.length}).map((_, i) => {
+            return (
+              <Button
+                key={'quiz_option_'+i} width='full' my={2} fontSize={20} boxShadow={buttonBorderColor[i]}
+                height={options.length === 4 ? '48px' : '112px'}
+                colorScheme={['whatsapp', 'twitter', 'purple', 'pink'][i]}
+                _active={{transform: 'scale(0.9)'}} onClick={() => selectOption(i)}
+              >
+                <b>{he.decode(options[i])}</b>
+              </Button>
+            )
+          })
+        }
         <Flex width='full' my={8} align="center" justifyContent="center">
-          <Button height='48px' width='48.5%' fontSize={20} boxShadow={buttonBorderColor[0]} colorScheme='whatsapp' _active={{transform: 'scale(0.9)'}} onClick={() => selectOption(0)}>
-            <b>{options[0]}</b>
-          </Button>
-          <Spacer />
-          <Button height='48px' width='48.5%' fontSize={20} boxShadow={buttonBorderColor[1]} colorScheme='twitter'_active={{transform: 'scale(0.9)'}} onClick={() => selectOption(1)}>
-            <b>{options[1]}</b>
-          </Button>
-        </Flex>
-        <Flex width='full' my={8} align="center" justifyContent="center">
-          <Button height='48px' width='48.5%' fontSize={20} boxShadow={buttonBorderColor[2]} colorScheme='purple' _active={{transform: 'scale(0.9)'}} onClick={() => selectOption(2)}>
-            <b>{options[2]}</b>
-          </Button>
-          <Spacer />
-          <Button height='48px' width='48.5%' fontSize={20} boxShadow={buttonBorderColor[3]} colorScheme='pink' _active={{transform: 'scale(0.9)'}} onClick={() => selectOption(3)}>
-            <b>{options[3]}</b>
-          </Button>
-        </Flex>
-        <Flex width='full' my={8} align="center" justifyContent="center">
-          <IconButton isDisabled={previousBtnDisabled} aria-label='Previous Question' borderRightRadius={0} height='48px' width='50%' fontSize={20} colorScheme='gray' icon={<BiSolidLeftArrow />} _active={{transform: 'scale(0.9)'}} onClick={() => handlePreviousQuestion()} />
-          <IconButton aria-label='Next Question' borderLeftRadius={0} height='48px' width='50%' fontSize={20} colorScheme='gray' icon={<BiSolidRightArrow />} _active={{transform: 'scale(0.9)'}} onClick={() => handleNextQuestion()} />
+          <IconButton isDisabled={quizIndex === 0} aria-label='Previous Question' borderRightRadius={0} height='48px' width='50%' fontSize={20} colorScheme='gray' icon={<BiSolidLeftArrow />} _active={{transform: 'scale(0.9)'}} onClick={() => handleChangeQuestion(quizIndex-1)} />
+          <IconButton aria-label='Next Question' borderLeftRadius={0} height='48px' width='50%' fontSize={20} colorScheme='gray' icon={<BiSolidRightArrow />} _active={{transform: 'scale(0.9)'}} onClick={() => handleChangeQuestion(quizIndex+1)} />
         </Flex>
       </Box>
 

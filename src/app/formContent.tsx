@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Stack, Box, Button, Text, Link, useToast, useDisclosure } from '@chakra-ui/react';
 import axios from 'axios';
-import Email from './formContent/email';
-import Password from './formContent/password';
-import Username from './formContent/username';
-import SignupConfirmAlert from '@/formContent/signupConfirmModel';
+import Email from '../components/formContent/email';
+import Password from '../components/formContent/password';
+import Username from '../components/formContent/username';
+import SignupConfirmAlert from '../components/formContent/signupConfirmModel';
 import { useAppSelector } from '@/lib/hooks';
 import { useAppDispatch } from '@/lib/hooks';
 import validator from 'validator';
@@ -20,9 +20,10 @@ const FormContent = () => {
   const [isPasswordEmpty, setPasswordEmpty] = useState(false);
   const [username, setUsername] = useState('');
   const [isUsernameEmpty, setUsernameEmpty] = useState(false);
+  const [btnIsLoading, setBtnIsLoading] = useState(false);
   const router = useRouter();
   const toast = useToast();
-  const { currentAction, status } = useAppSelector(state => state.login.loginObject);
+  const { currentAction, currentStatus } = useAppSelector(state => state.login.loginObject);
   const dispatch = useAppDispatch();
   const searchParamas = useSearchParams();
 
@@ -37,7 +38,7 @@ const FormContent = () => {
           const tokenConfirmResult = await axios.post(BACKEND_URL + '/user/tokenConfirm', {token}, {withCredentials: true});
           console.log(tokenConfirmResult);
           setEmail(tokenConfirmResult.data.useremail);
-          dispatch(replaceStatus('signup'));
+          dispatch(replaceStatus('initial_registration'));
           dispatch(replaceAction('signup'));
         } catch (err: any) {
           console.log('LoginForm fetch /tokenConfirm: Error: ', err);
@@ -71,16 +72,18 @@ const FormContent = () => {
   const handleContinue = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
-    if (status === 'email') {
+    if (currentStatus === 'email_input') {
       // Check inputs are not empty 
       if (!email) setEmailEmpty(true);
       if (email) {
+        setBtnIsLoading(true);
         console.log('start sign in');
         try {
 
           // Sign in process
           if (validator.isEmail(email)) {
             const loginResult = await axios.post(BACKEND_URL + '/user/emailConfirm', {email}, {withCredentials: true});
+            setBtnIsLoading(false);
             console.log(loginResult);
             if (loginResult.data.result === 'email_not_existed') {
               if (currentAction === 'signup') {
@@ -110,10 +113,11 @@ const FormContent = () => {
                 });
                 dispatch(replaceAction('login'));
               } else if (currentAction === 'login') {
-                dispatch(replaceStatus('password'));
+                dispatch(replaceStatus('password_input'));
               }
             }
           } else {
+            setBtnIsLoading(false);
             toast({
               position: 'top',
               title: 'Email Not Valid',
@@ -126,6 +130,7 @@ const FormContent = () => {
 
         } // Handle error in specific case
           catch (err: any) {
+            setBtnIsLoading(false);
             console.log('LoginForm fetch /confirmEmail: Error: ', err);
             toast({
               position: 'top',
@@ -137,9 +142,10 @@ const FormContent = () => {
             });
         }
       }
-    } else if (status === 'password') {
+    } else if (currentStatus === 'password_input') {
       if (!password) setPasswordEmpty(true);
       if (password) {
+        setBtnIsLoading(true);
         console.log('start login');
         try {
 
@@ -147,9 +153,10 @@ const FormContent = () => {
           const loginResult = await axios.post(BACKEND_URL + '/user/signIn', {password, email}, {withCredentials: true});
           console.log(loginResult);
           router.push('/quizform');
-  
+
         } // Handle error in specific case
           catch (err: any) {
+          setBtnIsLoading(false);
           console.log('LoginForm fetch /signIn: Error: ', err);
           if (err.response.data.type === 'user_not_found' || err.response.data.type === 'invalid_credentials') {
             toast.closeAll();
@@ -173,7 +180,7 @@ const FormContent = () => {
           }
         }
       }
-    } else if (status === 'signup') {
+    } else if (currentStatus === 'initial_registration') {
       // Check inputs are not empty 
       if (!password) setPasswordEmpty(true);
       if (!username) setUsernameEmpty(true);
@@ -190,14 +197,17 @@ const FormContent = () => {
 
       // Sign up process
       if(password && username && email) {
+        setBtnIsLoading(true);
         console.log('start sign up');
         try {
           const signUpResult = await axios.post(BACKEND_URL + '/user/signUp', {username, password, email}, {withCredentials: true});
+          setBtnIsLoading(false);
           console.log(signUpResult);
           router.push('/quizform');
 
         } // Handle error in specific case
           catch (err: any) {
+          setBtnIsLoading(false);
           console.log('LoginForm fetch /signUp: Error: ', err);
           if (err.response.data.type === 'email_already_exists') {
             toast.closeAll();
@@ -233,26 +243,29 @@ const FormContent = () => {
 
         {/* Email Input */}
         {
-          status === 'email' ? <Email setEmail={setEmail} isEmailEmpty={isEmailEmpty} setEmailEmpty={setEmailEmpty} />
-            : status === 'password' ? <Password setPassword={setPassword} isPasswordEmpty={isPasswordEmpty} setPasswordEmpty={setPasswordEmpty} showPassword={showPassword} handleView={() => {setShowPassword(!showPassword)}} />
-            : status === 'signup' ? <>
+          currentStatus === 'email_input' ? <Email setEmail={setEmail} isEmailEmpty={isEmailEmpty} setEmailEmpty={setEmailEmpty} />
+            : currentStatus === 'password_input' ? <Password setPassword={setPassword} isPasswordEmpty={isPasswordEmpty} setPasswordEmpty={setPasswordEmpty} showPassword={showPassword} handleView={() => {setShowPassword(!showPassword)}} />
+            : currentStatus === 'initial_registration' ? <>
               <Username setUsername={setUsername} isUsernameEmpty={isUsernameEmpty} setUsernameEmpty={setUsernameEmpty} />
               <Password setPassword={setPassword} isPasswordEmpty={isPasswordEmpty} setPasswordEmpty={setPasswordEmpty} showPassword={showPassword} handleView={() => {setShowPassword(!showPassword)}} />
             </> : null
         }
 
         {/* Submit Button */}
-        <Button color='white' _hover={{ bg: 'teal' }} bg='teal.300' border='1px' borderColor='#ccd0d5' width="full" mt={4} type="submit" onClick={handleContinue}>
+        <Button
+          color='white' _hover={{ bg: 'teal' }} bg='teal.300' border='1px' borderColor='#ccd0d5' width="full" mt={4} type="submit" onClick={handleContinue}
+          isLoading={btnIsLoading}
+        >
           Continue
         </Button>
 
         <Stack pt={6}>
           <Text align={'center'} onClick={() => {
             dispatch(replaceAction(currentAction === 'signup' ? 'login' : 'signup'))
-            dispatch(replaceStatus('email'));
+            dispatch(replaceStatus('email_input'));
           }}
             _hover={{ cursor: 'pointer' }}>
-            Don’t have an account? <Link color={'teal.500'}>{currentAction === 'signup' ? 'Login' : 'Sign Up'}</Link>
+            {currentAction === 'signup' ? 'Already have an account?' : "Don’t have an account?"} <Link color={'teal.500'}>{currentAction === 'signup' ? 'Login' : 'Sign Up'}</Link>
           </Text>
         </Stack>
 

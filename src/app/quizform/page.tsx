@@ -31,20 +31,20 @@ const QuizForm = () => {
   const handleStartQuiz = async () => {
 
     // Create api string
-    let apiString = 'https://opentdb.com/api.php?';
+    let triviaApiString = 'https://opentdb.com/api.php?';
     console.log(questionNumber);
     console.log(category);
     console.log(difficulty);
     console.log(questionType);
-    apiString += `amount=${questionNumber}`;
-    apiString += category !== 'any' ? `&category=${category}` : '';
-    apiString += difficulty !== 'any' ? `&difficulty=${difficulty}` : '';
-    apiString += questionTypes[1] ? '&type=multiple' : questionTypes[2] ? '&type=boolean' : '';
-    console.log(apiString);
+    triviaApiString += `amount=${questionNumber}`;
+    triviaApiString += category !== 'any' ? `&category=${category}` : '';
+    triviaApiString += difficulty !== 'any' ? `&difficulty=${difficulty}` : '';
+    triviaApiString += questionTypes[1] ? '&type=multiple' : questionTypes[2] ? '&type=boolean' : '';
+    console.log(triviaApiString);
 
     // Fetch quiz and update quiz state
     try {
-      const fetchQuizResult = await axios(apiString);
+      const fetchQuizResult = await axios(triviaApiString);
       console.log(fetchQuizResult)
       if (fetchQuizResult.data.response_code === 0) {
         dispatch(replaceQuiz({questionNumber, category, difficulty, questionType, data: fetchQuizResult.data.results}));
