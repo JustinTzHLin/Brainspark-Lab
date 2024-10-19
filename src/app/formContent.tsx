@@ -23,7 +23,7 @@ const FormContent = () => {
   const [btnIsLoading, setBtnIsLoading] = useState(false);
   const router = useRouter();
   const toast = useToast();
-  const { currentAction, currentStatus } = useAppSelector(state => state.login.loginObject);
+  const { currentAction, currentStatus } = useAppSelector(state => state.login.userAccess);
   const dispatch = useAppDispatch();
   const searchParamas = useSearchParams();
 
@@ -153,6 +153,7 @@ const FormContent = () => {
           const loginResult = await axios.post(BACKEND_URL + '/user/signIn', {password, email}, {withCredentials: true});
           console.log(loginResult);
           router.push('/quizform');
+          setBtnIsLoading(false);
 
         } // Handle error in specific case
           catch (err: any) {
@@ -201,9 +202,9 @@ const FormContent = () => {
         console.log('start sign up');
         try {
           const signUpResult = await axios.post(BACKEND_URL + '/user/signUp', {username, password, email}, {withCredentials: true});
-          setBtnIsLoading(false);
           console.log(signUpResult);
           router.push('/quizform');
+          setBtnIsLoading(false);
 
         } // Handle error in specific case
           catch (err: any) {

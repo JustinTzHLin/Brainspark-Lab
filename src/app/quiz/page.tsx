@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 import he from 'he';
 import { useAppSelector } from '@/lib/hooks';
 import {
-  Flex, Spacer, Box, Heading, Stack, Center, Badge, Button, IconButton, useDisclosure, StackDivider, Text, Skeleton, SkeletonText,
+  Flex, Spacer, Box, Heading, Stack, Center, Badge, Button, IconButton, useDisclosure, StackDivider, Text, Skeleton, SkeletonText, Tooltip,
   Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, PopoverArrow, PopoverCloseButton, Progress,
   Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
 } from '@chakra-ui/react';
@@ -11,7 +11,6 @@ import Image from 'next/image';
 import { InfoIcon } from '@chakra-ui/icons';
 import { BiSolidLeftArrow, BiSolidRightArrow  } from "react-icons/bi";
 import { useRouter } from 'next/navigation';
-import EmptyAnswerAlert from './emptyAnswerAlert';
 import SubmitAnswerAlert from './submitAnswerAlert';
 import AnswerResultModal from './answerResultModal';
 
@@ -32,7 +31,7 @@ const Quiz = () => {
     correct_answer: '',
     incorrect_answers: []
   });
-  const [buttonBorderColor, setButtonBorderColor] = useState(['0px 0px 0px 0px #DD6B20 inset', '0px 0px 0px 0px #DD6B20 inset', '0px 0px 0px 0px #DD6B20 inset', '0px 0px 0px 0px #DD6B20 inset']);
+  const [buttonBorderColor, setButtonBorderColor] = useState(Array(4).fill('0px 0px 0px 0px #DD6B20 inset'));
 
   // Shuffle options array
   const shuffleArray = (array: string[]) => {
@@ -74,7 +73,7 @@ const Quiz = () => {
     if (questionIndex < questionNumber) {
       setQuizIndex(questionIndex);
       setQuiz(data[questionIndex]);
-      setButtonBorderColor(['0px 0px 0px 0px #DD6B20 inset', '0px 0px 0px 0px #DD6B20 inset', '0px 0px 0px 0px #DD6B20 inset', '0px 0px 0px 0px #DD6B20 inset']);
+      setButtonBorderColor(Array(4).fill('0px 0px 0px 0px #DD6B20 inset'));
       const newOptions = shuffleArray([data[questionIndex].correct_answer].concat(data[questionIndex].incorrect_answers));
       setOptions(newOptions);
       for (let i = 0; i < newOptions.length; i++) {
@@ -146,9 +145,6 @@ const Quiz = () => {
     resetGeminiContent();
   }
 
-  const { isOpen: answerEmptyIsOpen, onOpen: answerEmptyOpen, onClose: answerEmptyClose } = useDisclosure();
-  const cancelAnswerEmptyRef = useRef<null | HTMLButtonElement>(null);
-
   const { isOpen: submitAnswerIsOpen, onOpen: submitAnswerOpen, onClose: submitAnswerClose } = useDisclosure();
   const cancelSubmitAnswerRef = useRef<null | HTMLButtonElement>(null);
 
@@ -181,7 +177,7 @@ const Quiz = () => {
                     <Box>
                       <Skeleton isLoaded={geminiContentSuccess}>
                         <Heading size='md' textTransform='uppercase'>
-                          Correct Answer:{quiz.correct_answer}
+                          Correct Answer: {he.decode(quiz.correct_answer)}
                         </Heading>
                       </Skeleton>
                       <SkeletonText pt={geminiContentSuccess ? '1' : '3'} noOfLines={2} spacing='4' skeletonHeight='3' isLoaded={geminiContentSuccess}>
@@ -190,12 +186,12 @@ const Quiz = () => {
                         </Text>
                       </SkeletonText>
                     </Box>
-                    {quiz.incorrect_answers.map((incorrectAnswer: [string], i: number) => {
+                    {quiz.incorrect_answers.map((incorrectAnswer: string, i: number) => {
                       return (
                         <Box key={'incorrectAnswerBox' + i}>
                           <Skeleton isLoaded={geminiContentSuccess}>
                             <Heading size='sm' textTransform='uppercase'>
-                              {incorrectAnswer}
+                              {he.decode(incorrectAnswer)}
                             </Heading>
                           </Skeleton>
                           <SkeletonText pt={geminiContentSuccess ? '1' : '3'} noOfLines={2} spacing='3' skeletonHeight='3' isLoaded={geminiContentSuccess}>
@@ -257,11 +253,15 @@ const Quiz = () => {
         </Flex>
         <Progress my={8} colorScheme='orange' value={(quizIndex+1)*100/questionNumber} />
         <Flex width='full' my={8} align="center" justifyContent="center">
-          <Badge w='50%' fontSize={14} textAlign='center' variant='solid' colorScheme='green'>{quiz.category}</Badge>
+          <Tooltip label={quiz.category} bg='gray.300' color='black' hasArrow>
+            <Badge w='46%' fontSize={14} textAlign='center' variant='solid' colorScheme='green'>
+              {quiz.category.startsWith('Entertainment') ? 'Entertainment' : quiz.category}
+            </Badge>
+          </Tooltip>
           <Spacer />
-          <Badge w='20%' fontSize={14} textAlign='center' variant='solid' colorScheme='red'>{quiz.difficulty}</Badge>
+          <Badge w='22%' fontSize={14} textAlign='center' variant='solid' colorScheme='red'>{quiz.difficulty}</Badge>
           <Spacer />
-          <Badge w='20%' fontSize={14} textAlign='center' variant='solid' colorScheme='purple'>{quiz.type}</Badge>
+          <Badge w='22%' fontSize={14} textAlign='center' variant='solid' colorScheme='purple'>{quiz.type}</Badge>
         </Flex>
         <Center my={4} textAlign="left" width='full' bg='orange.500' py={3} pl={3.5} pr={3.5} borderRadius={10}>
           <Box textAlign="left" w='30rem' bg='white' p={2} borderRadius={6} h='8rem'>
@@ -287,9 +287,6 @@ const Quiz = () => {
           <IconButton aria-label='Next Question' borderLeftRadius={0} height='48px' width='50%' fontSize={20} colorScheme='gray' icon={<BiSolidRightArrow />} _active={{transform: 'scale(0.9)'}} onClick={() => handleChangeQuestion(quizIndex+1)} />
         </Flex>
       </Box>
-
-      {/* Empty Answer Alert */}
-      <EmptyAnswerAlert answerEmptyIsOpen={answerEmptyIsOpen} answerEmptyClose={answerEmptyClose} cancelAnswerEmptyRef={cancelAnswerEmptyRef}/>
 
       {/* Submit Answer Alert */}
       <SubmitAnswerAlert submitAnswerIsOpen={submitAnswerIsOpen} submitAnswerClose={submitAnswerClose} cancelSubmitAnswerRef={cancelSubmitAnswerRef} checkAnswers={checkAnswers} />
