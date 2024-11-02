@@ -1,6 +1,6 @@
-import {
-  Box, Stack, FormControl, FormLabel, Icon, Checkbox, Center, Flex
-} from '@chakra-ui/react';
+import { Stack, Icon, Center, Flex } from '@chakra-ui/react';
+import { Field } from '@/components/ui/field';
+import { Checkbox } from "@/components/ui/checkbox"
 import { BsUiRadios } from "react-icons/bs";
 
 interface QuestionTypeProps {
@@ -10,27 +10,30 @@ interface QuestionTypeProps {
 
 const QuestionType: React.FC<QuestionTypeProps> = ({ questionTypes, setQuestionTypes }) => {
   return (
-    <FormControl mt={6}>
-      <FormLabel color='teal.300'>Question Type</FormLabel>
-      <Flex>
-        <Center width='2.75rem' borderColor='gray.200' borderWidth='1px' borderRadius='0.375rem'>
-          <Icon boxSize={5} color='teal.300' as={BsUiRadios }/>
+    <>
+      <Field mt={6} label='Question Type'>
+      </Field>
+      <Flex w="full" h={10} mt={-2.5}>
+        <Center width='2.75rem' borderColor='gray.200' borderWidth='1px' borderRadius='0.375rem' borderTopRightRadius={0} borderBottomRightRadius={0} borderRightWidth={0}>
+          <Icon boxSize={5}>
+            <BsUiRadios />
+          </Icon>
         </Center>
-        <Box borderWidth='1px' borderRadius='md' p={1.5} width='100%'>
-          <Stack direction='row' spacing={10} ml={3} >
-            <Checkbox colorScheme='teal' isChecked={questionTypes[0]} onChange={() => setQuestionTypes([true, false, false])}>
+        <Center borderWidth='1px' borderRadius='md' width='100%' borderTopLeftRadius={0} borderBottomLeftRadius={0}>
+          <Stack direction='row' gap={4}>
+            <Checkbox checked={questionTypes[0]} onCheckedChange={() => setQuestionTypes([true, false, false])}>
               Any
             </Checkbox>
-            <Checkbox colorScheme='teal' isChecked={questionTypes[1]} onChange={() => setQuestionTypes([false, true, false])}>
+            <Checkbox checked={questionTypes[1]} onCheckedChange={() => setQuestionTypes([false, true, false])}>
               Multiple Choice
             </Checkbox>
-            <Checkbox colorScheme='teal' isChecked={questionTypes[2]} onChange={() => setQuestionTypes([false, false, true])}>
+            <Checkbox checked={questionTypes[2]} onCheckedChange={() => setQuestionTypes([false, false, true])}>
               True / False
             </Checkbox>
           </Stack>
-        </Box>
+        </Center>
       </Flex>
-    </FormControl>
+    </>
   )
 }
 

@@ -30,7 +30,7 @@ Brainspark-Lab is built with:
 
 
 ## Getting Started With Brainspark-Lab
-Visit https://brainspark-lab-frontend.vercel.app/ and have fun!
+Visit https://brainspark-lab.vercel.app/ and have fun!
 
 
 ## License

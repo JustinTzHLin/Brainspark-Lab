@@ -1,4 +1,4 @@
-import { Box, Button } from '@chakra-ui/react';
+import { Box, Button, Fieldset, Text } from '@chakra-ui/react';
 import NumberOfQuestions from '../../components/quizFormContent/numberOfQuestions';
 import Category from '../../components/quizFormContent/category';
 import QuestionType from '../../components/quizFormContent/questiontype';
@@ -17,27 +17,28 @@ interface QuizFormContentProps {
 
 const QuizFormContent: React.FC<QuizFormContentProps> = ({ questionNumber, setQuestionNumber, setCategory, difficulty, setDifficulty, questionTypes, setQuestionTypes, handleStartQuiz }) => {
   return (
-    <Box my={4} textAlign="left" width='30rem'>
-      <form>
+    <Box my={4} textAlign="left" w="26rem">
+      <Fieldset.Root>
+        <Fieldset.Content w="26rem">
 
-        {/* Number of Questions */}
-        <NumberOfQuestions questionNumber={questionNumber} setQuestionNumber={setQuestionNumber} />
+          {/* Number of Questions */}
+          <NumberOfQuestions questionNumber={questionNumber} setQuestionNumber={setQuestionNumber} />
 
-        {/* Category */}
-        <Category setCategory={setCategory} />
-        
-        {/* Difficulty */}
-        <Difficulty difficulty={difficulty} setDifficulty={setDifficulty} />
-        
-        {/* Question Type */}
-        <QuestionType questionTypes={questionTypes} setQuestionTypes={setQuestionTypes} />
+          {/* Category */}
+          <Category setCategory={setCategory} />
+          
+          {/* Difficulty */}
+          <Difficulty difficulty={difficulty} setDifficulty={setDifficulty} />
+          
+          {/* Question Type */}
+          <QuestionType questionTypes={questionTypes} setQuestionTypes={setQuestionTypes} />
 
-        {/* Start Quiz Button */}
-        <Button
-          color='white' _hover={{ bg: 'gray.100', color:'teal.300' }} bg='teal.300' border='1px' borderColor='#ccd0d5' width="full" mt={6} onClick={handleStartQuiz}>
-          <b>S t a r t&nbsp;&nbsp;&nbsp;&nbsp;Q u i z !</b>
-        </Button>
-      </form>
+          {/* Start Quiz Button */}
+          <Button width="full" mt={6} onClick={handleStartQuiz}>
+            <Text fontSize="md"><b>S t a r t&nbsp;&nbsp;&nbsp;&nbsp;Q u i z !</b></Text>
+          </Button>
+        </Fieldset.Content>
+      </Fieldset.Root>
     </Box>
   )
 }

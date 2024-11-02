@@ -3,13 +3,34 @@ import React, { useRef, useState } from 'react';
 import he from 'he';
 import { useAppSelector } from '@/lib/hooks';
 import {
-  Flex, Spacer, Box, Heading, Stack, Center, Badge, Button, IconButton, useDisclosure, StackDivider, Text, Skeleton, SkeletonText, Tooltip,
-  Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, PopoverArrow, PopoverCloseButton, Progress,
-  Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
+  Flex, Spacer, Box, Heading, Stack, Center, Badge, Button, IconButton, useDisclosure, StackSeparator, Text
 } from '@chakra-ui/react';
+import {
+  DialogBackdrop,
+  DialogBody,
+  DialogCloseTrigger,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogRoot,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverRoot,
+  PopoverTrigger,
+  PopoverCloseTrigger,
+  PopoverHeader
+} from "@/components/ui/popover"
+import { Skeleton, SkeletonText } from "@/components/ui/skeleton"
+import { ProgressBar, ProgressRoot } from "@/components/ui/progress"
+import { Tooltip } from '@/components/ui/tooltip';
 import Image from 'next/image';
-import { InfoIcon } from '@chakra-ui/icons';
 import { BiSolidLeftArrow, BiSolidRightArrow  } from "react-icons/bi";
+import { LuInfo } from "react-icons/lu";
 import { useRouter } from 'next/navigation';
 import SubmitAnswerAlert from './submitAnswerAlert';
 import AnswerResultModal from './answerResultModal';
@@ -79,7 +100,7 @@ const Quiz = () => {
       for (let i = 0; i < newOptions.length; i++) {
         if (newOptions[i] === userAnswers[questionIndex]) handleSelectedChoice(i);
       }
-    } else submitAnswerOpen();
+    } else setSubmitAnswerIsOpen(true);
   }
 
   // Check and store answers process
@@ -105,14 +126,14 @@ const Quiz = () => {
       })
       .catch(err => console.log('LoginForm fetch /signUp: Error: ', err));
     setCorrectCount(counting);
-    submitAnswerClose();
-    checkAnswerOpen();
+    setSubmitAnswerIsOpen(false);
+    setCheckAnswer(true);
   }
 
   // Gemini generate explanation process
   const askGemini = () => {
     setGeminiContentSuccess(false);
-    geminiModalOpen();
+    setGeminiModalIsOpen(true);
     fetch('/api/gemini/quizInformation', {
       method: 'POST',
       credentials: 'include',
@@ -141,104 +162,110 @@ const Quiz = () => {
 
   // Handle Gemini modal close
   const handleGeminiModalClose = () => {
-    geminiModalClose();
+    setGeminiModalIsOpen(false);
     resetGeminiContent();
   }
 
-  const { isOpen: submitAnswerIsOpen, onOpen: submitAnswerOpen, onClose: submitAnswerClose } = useDisclosure();
+  const [submitAnswerIsOpen, setSubmitAnswerIsOpen] = useState(false);
   const cancelSubmitAnswerRef = useRef<null | HTMLButtonElement>(null);
 
-  const { isOpen: checkAnswer, onOpen: checkAnswerOpen, onClose: checkAnswerClose } = useDisclosure();
+  const [checkAnswer, setCheckAnswer] = useState(false);
 
-  const { isOpen: geminiModalIsOpen, onOpen: geminiModalOpen, onClose: geminiModalClose } = useDisclosure();
+  const [geminiModalIsOpen, setGeminiModalIsOpen] = useState(false);
 
-  const { isOpen: questionStatusIsOpen, onOpen: questionStatusOpen, onClose: questionStatusClose } = useDisclosure();
+  const [questionStatusIsOpen, setQuestionStatusIsOpen] = useState(false);
 
   return (
     <Flex width="full" align="center" justifyContent="center" p={8} h="100vh">
       <Box p={8} width="510px" borderWidth={1} borderRadius={8} boxShadow="lg">
-        <Flex width="full" align="center" justifyContent="center">
-          <Box textAlign="left" pr='10%'>
+        <Flex width="full" align="center" justify="space-between">
+          <Box>
             <IconButton
-              icon={<Image src="/geminiIcon.svg" alt="Gemini Icon" height={25} width={25}/>} 
-              variant={"ghost"}
+              variant="ghost"
               aria-label="Gemini Icon Button"
               onClick={askGemini}
-              isRound={true}
+              rounded="full"
               _active={{transform: 'scale(0.8)'}}
-            />
-            <Modal isOpen={geminiModalIsOpen} onClose={handleGeminiModalClose} isCentered size={"2xl"}>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader><Heading size='lg'>Explanation from Gemini</Heading></ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  <Stack divider={<StackDivider />} spacing={3}>
+            >
+              <Image src="/geminiIcon.svg" alt="Gemini Icon" height={25} width={25}/>
+            </IconButton>
+            <DialogRoot open={geminiModalIsOpen} onOpenChange={handleGeminiModalClose} placement="center" size="xl">
+              <DialogBackdrop />
+              <DialogContent>
+                <DialogCloseTrigger />
+                <DialogHeader>
+                  <DialogTitle><Heading size='2xl'>Explanation from Gemini</Heading></DialogTitle>
+                </DialogHeader>
+                <DialogBody>
+                  <Stack separator={<StackSeparator />} gap={3}>{/* test */}
                     <Box>
-                      <Skeleton isLoaded={geminiContentSuccess}>
+                      <Skeleton loading={!geminiContentSuccess} mb={geminiContentSuccess ? 0 : 3}>
                         <Heading size='md' textTransform='uppercase'>
                           Correct Answer: {he.decode(quiz.correct_answer)}
                         </Heading>
                       </Skeleton>
-                      <SkeletonText pt={geminiContentSuccess ? '1' : '3'} noOfLines={2} spacing='4' skeletonHeight='3' isLoaded={geminiContentSuccess}>
+                      <SkeletonText noOfLines={2} gap='3' pt={geminiContentSuccess ? '1' : '3'} height='8' loading={!geminiContentSuccess}>
+                        {/* pt={geminiContentSuccess ? '3' : '1'} noOfLines={2} gap='4' height='3' loading={!geminiContentSuccess} */}
                         <Text>
                           {geminiContentObj.correctAnswer}
                         </Text>
                       </SkeletonText>
                     </Box>
-                    {quiz.incorrect_answers.map((incorrectAnswer: string, i: number) => {
-                      return (
-                        <Box key={'incorrectAnswerBox' + i}>
-                          <Skeleton isLoaded={geminiContentSuccess}>
+                    {quiz.incorrect_answers.map((incorrectAnswer: string, i: number) => 
+                      (
+                        <Box key={'incorrectAnswerBox_' + i}>
+                          <Skeleton loading={!geminiContentSuccess} mb={geminiContentSuccess ? 0 : 3}>
                             <Heading size='sm' textTransform='uppercase'>
                               {he.decode(incorrectAnswer)}
                             </Heading>
                           </Skeleton>
-                          <SkeletonText pt={geminiContentSuccess ? '1' : '3'} noOfLines={2} spacing='3' skeletonHeight='3' isLoaded={geminiContentSuccess}>
+                          <SkeletonText noOfLines={2} gap='3' pt={geminiContentSuccess ? '1' : '3'} height='6' loading={!geminiContentSuccess}>
+                          {/* pt={geminiContentSuccess ? '3' : '1'} noOfLines={2} gap='3' height='3' loading={!geminiContentSuccess} */}
                             <Text>
                               {geminiContentObj.incorrectAnswers[i]}
                             </Text>
                           </SkeletonText>
                         </Box>
                       )
-                    })}
+                    )}
                   </Stack>
-                </ModalBody>
+                </DialogBody>
 
-                <ModalFooter>
+                <DialogFooter>
                   <Button colorScheme='blue' mr={3} onClick={handleGeminiModalClose}>
                     Close
                   </Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
+                </DialogFooter>
+              </DialogContent>
+            </DialogRoot>
           </Box>
-          <Box textAlign="center" w='80%'>
-            <Heading color='orange.500'>Quiz {quizIndex+1}/{questionNumber}</Heading>
-          </Box>
-          <Box textAlign="right" pl='10%'>
-            <Popover placement='bottom-end' isOpen={questionStatusIsOpen} onClose={questionStatusClose} onOpen={questionStatusOpen}>
+          <Heading size='3xl' fontWeight="bold">Quiz {quizIndex+1}/{questionNumber}</Heading>
+          <Box>
+            {/* test */}
+            <PopoverRoot positioning={{ placement: "bottom-end" }} open={questionStatusIsOpen} onOpenChange={e => setQuestionStatusIsOpen(e.open)}>
               <PopoverTrigger>
-                <IconButton
-                  aria-label="Info"
-                  icon={<InfoIcon boxSize={5} />}
-                  color='orange.500'
+                <Button
+                  aria-label="Quiz Status"
                   variant="ghost"
-                  isRound={true}
-                />
+                  rounded="full"
+                  _active={{transform: 'scale(0.8)'}}
+                  aspectRatio={1}
+                >
+                  <LuInfo />
+                </Button>
               </PopoverTrigger>
               <PopoverContent textAlign="left" w='445px'>
                 <PopoverArrow />
-                <PopoverCloseButton />
-                <PopoverHeader textAlign='center' fontSize={24} color='teal.500'><b>Quiz Status</b></PopoverHeader>
+                <PopoverCloseTrigger />
+                <PopoverHeader textAlign='center' fontSize={24}><b>Quiz Status</b></PopoverHeader>
                 <PopoverBody>
                   <Center>
-                    <Box w='416px'>
+                    <Box w={(40 + 6 * 2) * 7 + "px"}>
                       {userAnswers.map((userAnswer, i) => {
                         return (
                           <Button
-                            w='40px' key={'quizStatusButton' + i} m='6px' onClick={() => {handleChangeQuestion(i); questionStatusClose();}}
-                            colorScheme={userAnswer === '' ? 'gray' : 'teal'}
+                            w='40px' key={'quizStatusButton' + i} m='6px' onClick={() => {handleChangeQuestion(i); setQuestionStatusIsOpen(false);}}
+                            variant={userAnswer === '' ? "surface" : "solid"}
                           >
                             {i+1}
                           </Button>
@@ -248,22 +275,33 @@ const Quiz = () => {
                   </Center>
                 </PopoverBody>
               </PopoverContent>
-            </Popover>
+            </PopoverRoot>
           </Box>
         </Flex>
-        <Progress my={8} colorScheme='orange' value={(quizIndex+1)*100/questionNumber} />
+        <ProgressRoot my={8} value={questionNumber === 0 ? 0 :(quizIndex+1)*100/questionNumber}>
+          <ProgressBar />
+        </ProgressRoot>
         <Flex width='full' my={8} align="center" justifyContent="center">
-          <Tooltip label={quiz.category} bg='gray.300' color='black' hasArrow>
-            <Badge w='46%' fontSize={14} textAlign='center' variant='solid' colorScheme='green'>
-              {quiz.category.startsWith('Entertainment') ? 'Entertainment' : quiz.category}
+          <Tooltip
+            content={quiz.category} showArrow openDelay={100} closeDelay={250}
+            positioning={{offset: {mainAxis: 3}}}
+          >
+            <Badge w='46%' fontSize={15} textAlign='center' variant='surface' colorPalette='green' _hover={{cursor: 'pointer'}}>
+              <Center w="full">
+                {quiz.category.startsWith('Entertainment') ? 'Entertainment' : he.decode(quiz.category)}
+              </Center>
             </Badge>
           </Tooltip>
           <Spacer />
-          <Badge w='22%' fontSize={14} textAlign='center' variant='solid' colorScheme='red'>{quiz.difficulty}</Badge>
+          <Badge w='22%' fontSize={15} textAlign='center' variant='surface' colorPalette='red'>
+          <Center w="full">{quiz.difficulty}</Center>
+          </Badge>
           <Spacer />
-          <Badge w='22%' fontSize={14} textAlign='center' variant='solid' colorScheme='purple'>{quiz.type}</Badge>
+          <Badge w='22%' fontSize={15} textAlign='center' variant='surface' colorPalette='purple'>
+          <Center w="full">{quiz.type}</Center>
+          </Badge>
         </Flex>
-        <Center my={4} textAlign="left" width='full' bg='orange.500' py={3} pl={3.5} pr={3.5} borderRadius={10}>
+        <Center my={4} textAlign="left" width='full' bg='gray.500' py={3} pl={3.5} pr={3.5} borderRadius={10}>
           <Box textAlign="left" w='30rem' bg='white' p={2} borderRadius={6} h='8rem'>
             <b>{he.decode(quiz.question)}</b>
           </Box>
@@ -273,8 +311,8 @@ const Quiz = () => {
             return (
               <Button
                 key={'quiz_option_'+i} width='full' my={2} fontSize={20} boxShadow={buttonBorderColor[i]}
-                height={options.length === 4 ? '48px' : '112px'}
-                colorScheme={['whatsapp', 'twitter', 'purple', 'pink'][i]}
+                height={options.length === 4 ? '48px' : '112px'} variant="subtle"
+                //colorScheme={['whatsapp', 'twitter', 'purple', 'pink'][i]}
                 _active={{transform: 'scale(0.9)'}} onClick={() => selectOption(i)}
               >
                 <b>{he.decode(options[i])}</b>
@@ -283,16 +321,20 @@ const Quiz = () => {
           })
         }
         <Flex width='full' my={8} align="center" justifyContent="center">
-          <IconButton isDisabled={quizIndex === 0} aria-label='Previous Question' borderRightRadius={0} height='48px' width='50%' fontSize={20} colorScheme='gray' icon={<BiSolidLeftArrow />} _active={{transform: 'scale(0.9)'}} onClick={() => handleChangeQuestion(quizIndex-1)} />
-          <IconButton aria-label='Next Question' borderLeftRadius={0} height='48px' width='50%' fontSize={20} colorScheme='gray' icon={<BiSolidRightArrow />} _active={{transform: 'scale(0.9)'}} onClick={() => handleChangeQuestion(quizIndex+1)} />
+          <IconButton disabled={quizIndex === 0} aria-label='Previous Question' borderRightRadius={0} height='48px' width='50%' fontSize={20} colorScheme='gray' _active={{transform: 'scale(0.9)'}} onClick={() => handleChangeQuestion(quizIndex-1)} variant="subtle">
+            <BiSolidLeftArrow />
+          </IconButton>
+          <IconButton aria-label='Next Question' borderLeftRadius={0} height='48px' width='50%' fontSize={20} colorScheme='gray' _active={{transform: 'scale(0.9)'}} onClick={() => handleChangeQuestion(quizIndex+1)} variant="subtle">
+            <BiSolidRightArrow />
+          </IconButton>
         </Flex>
       </Box>
 
       {/* Submit Answer Alert */}
-      <SubmitAnswerAlert submitAnswerIsOpen={submitAnswerIsOpen} submitAnswerClose={submitAnswerClose} cancelSubmitAnswerRef={cancelSubmitAnswerRef} checkAnswers={checkAnswers} />
+      <SubmitAnswerAlert submitAnswerIsOpen={submitAnswerIsOpen} setSubmitAnswerIsOpen={setSubmitAnswerIsOpen} cancelSubmitAnswerRef={cancelSubmitAnswerRef} checkAnswers={checkAnswers} />
 
       {/* Answer Result Modal */}
-      <AnswerResultModal checkAnswer={checkAnswer} checkAnswerClose={checkAnswerClose} router={router} questionNumber={questionNumber} correctCount={correctCount} />
+      <AnswerResultModal checkAnswer={checkAnswer} setCheckAnswer={setCheckAnswer} router={router} questionNumber={questionNumber} correctCount={correctCount} />
 
     </Flex>
   );

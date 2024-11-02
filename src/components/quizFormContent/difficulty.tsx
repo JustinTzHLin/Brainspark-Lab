@@ -1,6 +1,8 @@
 import {
-  Flex, Box, Stack, FormControl, FormLabel, FormErrorMessage, Icon, Radio, RadioGroup, Center
+  Flex, Box, Stack, Icon, Center
 } from '@chakra-ui/react';
+import { Field } from '@/components/ui/field';
+import { Radio, RadioGroup } from '@/components/ui/radio';
 import { PiGaugeBold } from "react-icons/pi";
 
 interface DifficultyProps {
@@ -10,25 +12,25 @@ interface DifficultyProps {
 
 const Difficulty: React.FC<DifficultyProps> = ({ difficulty, setDifficulty }) => {
   return (
-    <FormControl mt={6}>
-      <FormLabel color='teal.300'>Difficulty</FormLabel>
-      <Flex>
-        <Center width='2.75rem' borderColor='gray.200' borderWidth='1px' borderRadius='0.375rem'>
-          <Icon boxSize={5} color='teal.300' as={PiGaugeBold }/>
+    <Field mt={6} label='Difficulty'>
+      <Flex w="full" h={10}>
+        <Center width='2.75rem' borderColor='gray.200' borderWidth='1px' borderRadius='0.375rem' borderTopRightRadius={0} borderBottomRightRadius={0} borderRightWidth={0}>
+          <Icon boxSize={5}>
+            <PiGaugeBold />
+          </Icon>
         </Center>
-        <Box borderWidth='1px' borderRadius='md' p={1.5} width='100%'>
-          <RadioGroup onChange={setDifficulty} value={difficulty} ml={3} >
-            <Stack direction='row' spacing={10} >
-              <Radio value='any' colorScheme='teal'>Any</Radio>
-              <Radio value='easy' colorScheme='teal'>Easy</Radio>
-              <Radio value='medium' colorScheme='teal'>Medium</Radio>
-              <Radio value='hard' colorScheme='teal'>Hard</Radio>
+        <Center borderWidth='1px' borderRadius='md' w="full" borderTopLeftRadius={0} borderBottomLeftRadius={0}>
+          <RadioGroup onValueChange={e => setDifficulty(e.value)} value={difficulty} variant="outline">
+            <Stack direction='row' gap={5}>
+              <Radio value='any'>Any</Radio>
+              <Radio value='easy'>Easy</Radio>
+              <Radio value='medium'>Medium</Radio>
+              <Radio value='hard'>Hard</Radio>
             </Stack>
           </RadioGroup>
-        </Box>
+        </Center>
       </Flex>
-      <FormErrorMessage>Username is required.</FormErrorMessage>
-    </FormControl>
+    </Field>
   )
 }
 

@@ -1,35 +1,49 @@
+// import {
+//   AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogBody, AlertDialogCloseButton, Button
+// } from "@chakra-ui/react";
 import {
-  AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogBody, AlertDialogCloseButton, Button
-} from "@chakra-ui/react";
+  DialogBackdrop,
+  DialogBody,
+  DialogCloseTrigger,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogRoot,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface SubmitAnswerAlertProps {
   submitAnswerIsOpen: boolean,
-  submitAnswerClose: () => void,
+  setSubmitAnswerIsOpen: (arg0: boolean) => void,
   cancelSubmitAnswerRef: any,
   checkAnswers: () => void
 }
 
-const SubmitAnswerAlert: React.FC<SubmitAnswerAlertProps> = ({ submitAnswerIsOpen, submitAnswerClose, cancelSubmitAnswerRef, checkAnswers }) => {
+const SubmitAnswerAlert: React.FC<SubmitAnswerAlertProps> = ({ submitAnswerIsOpen, setSubmitAnswerIsOpen, cancelSubmitAnswerRef, checkAnswers }) => {
 
   return (
-    <AlertDialog motionPreset='scale' leastDestructiveRef={cancelSubmitAnswerRef} onClose={submitAnswerClose} isOpen={submitAnswerIsOpen} isCentered >
-      <AlertDialogOverlay />
-      <AlertDialogContent>
-        <AlertDialogHeader>Submit Answers?</AlertDialogHeader>
-        <AlertDialogCloseButton />
-        <AlertDialogBody>
+    <DialogRoot motionPreset='scale' onOpenChange={e => setSubmitAnswerIsOpen(e.open)} open={submitAnswerIsOpen} placement='center'> {/* initialFocusEl={cancelSubmitAnswerRef} */}
+      <DialogBackdrop />
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Submit Answers?</DialogTitle>
+        </DialogHeader>
+        <DialogCloseTrigger />
+        <DialogBody>
           Double-check your answers, for once you submit, there&apos;s no turning back!
-        </AlertDialogBody>
-        <AlertDialogFooter>
-          <Button ref={cancelSubmitAnswerRef} onClick={submitAnswerClose}>
+        </DialogBody>
+        <DialogFooter>
+          <Button ref={cancelSubmitAnswerRef} onClick={() => setSubmitAnswerIsOpen(false)}>
             Nah
           </Button>
           <Button colorScheme='green' onClick={() => checkAnswers()} ml={3}>
             Sure thing!
           </Button>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+        </DialogFooter>
+      </DialogContent>
+    </DialogRoot>
   )
 }
 

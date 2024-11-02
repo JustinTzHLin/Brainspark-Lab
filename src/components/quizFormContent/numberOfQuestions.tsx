@@ -1,9 +1,11 @@
 import {
-  Flex, FormControl, FormLabel, Icon, Center,
-  NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper,
-  SliderFilledTrack, SliderTrack, Slider, SliderThumb
+  Flex, Icon, Center,
+  // NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper,
+  // SliderFilledTrack, SliderTrack, Slider, SliderThumb
 } from '@chakra-ui/react';
-import { AddIcon, MinusIcon } from '@chakra-ui/icons';
+import { Field } from '@/components/ui/field';
+import { NumberInputField, NumberInputRoot } from "@/components/ui/number-input"
+import { Slider } from "@/components/ui/slider"
 import { RiNumbersFill } from "react-icons/ri";
 
 interface NumberOfQuestionsProps {
@@ -14,31 +16,28 @@ interface NumberOfQuestionsProps {
 const NumberOfQuestions: React.FC<NumberOfQuestionsProps> = ({ questionNumber, setQuestionNumber }) => {
 
   return (
-    <FormControl>
-      <FormLabel color='teal.300'>Number of Questions</FormLabel>
-      <Flex>
-        <Center width='2.5rem' zIndex='10' borderColor='gray.200' borderWidth='1px' borderRadius='0.375rem'>
-          <Icon boxSize={5} color='teal.300' as={RiNumbersFill }/>
+    <Field label='Number of Questions'>
+      <Flex w="full">
+        <Center width='2.5rem' borderColor='gray.200' borderWidth='1px' borderRadius='0.375rem' borderTopRightRadius={0} borderBottomRightRadius={0} borderRightWidth={0}>
+          <Icon boxSize={5}>
+            <RiNumbersFill />
+          </Icon>
         </Center>
-        <NumberInput focusBorderColor='teal.300' maxW='200px' mr='1.5rem' min={1} max={50} value={questionNumber} onChange={(questionNumber) => setQuestionNumber(Math.round(Number(questionNumber)))} allowMouseWheel>
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper>
-              <AddIcon boxSize={2.5} />
-            </NumberIncrementStepper>
-            <NumberDecrementStepper>
-              <MinusIcon boxSize={2.5} />
-            </NumberDecrementStepper>
-          </NumberInputStepper>
-        </NumberInput>
-        <Slider flex='1' focusThumbOnChange={false} value={questionNumber} onChange={(questionNumber) => setQuestionNumber(questionNumber)} min={1} max={50}>
-          <SliderTrack>
-            <SliderFilledTrack bg='teal.300' />
+        <NumberInputRoot mr='1.5rem' min={1} max={50} value={questionNumber.toString()} onValueChange={(e) => setQuestionNumber(Math.round(Number(e.value)))} allowMouseWheel zIndex='10'>
+          <NumberInputField borderTopLeftRadius={0} borderBottomLeftRadius={0} />
+        </NumberInputRoot>
+        <Center h={10} w="40%">
+          <Slider
+            flex='1' value={[questionNumber]} onValueChange={(e) => setQuestionNumber(Number(e.value))} min={1} max={50}//test
+          /> 
+        </Center>
+        {/* focusThumbOnChange={false} */}
+          {/* <SliderTrack>
+            <SliderFilledTrack bg='teal.400' />
           </SliderTrack>
-          <SliderThumb fontSize='sm' boxSize='32px'>{questionNumber}</SliderThumb>
-        </Slider>
+          <SliderThumb fontSize='sm' boxSize='32px'>{questionNumber}</SliderThumb> */}
       </Flex>
-    </FormControl>
+    </Field>
   )
 }
 

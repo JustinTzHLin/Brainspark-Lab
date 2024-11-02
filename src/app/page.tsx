@@ -34,13 +34,13 @@ const LogInForm = () => {
   return (
     <Flex width="100%" align="center" justifyContent="center" p={8} height="100vh">
       <VerifyLoggedInModal />
-      <Box p={8} maxWidth="700px" borderWidth={1} borderRadius={8} boxShadow="lg"> 
+      <Box p={8} maxW="full" borderWidth={1} borderRadius={8} boxShadow="md"> 
         <Box textAlign="center">
-          <Heading color='teal.300'>{currentAction === 'signup' ? 'Sign Up' : 'Login'}</Heading>
+          <Heading size="3xl">{currentAction === 'signup' ? 'Sign Up' : 'Login'}</Heading> {/* color='teal.400' */}
         </Box>
 
         {/* Login Form Content */}
-        <Suspense fallback={<Box width="30rem" height="216px"></Box>}>
+        <Suspense fallback={<Box width="26rem" height="216px" maxW="full"></Box>}>
           <FormContent />
         </Suspense>
       </Box>

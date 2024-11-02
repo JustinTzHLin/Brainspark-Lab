@@ -4,8 +4,6 @@ import { useAppDispatch } from '@/lib/hooks';
 import { replaceQuiz } from '@/lib/features/quizSlice';
 import {
   Flex, Box, Heading, IconButton,
-  Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, PopoverFooter, PopoverArrow, PopoverCloseButton,
-  Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer,
 } from '@chakra-ui/react';
 import { MdAccountBox } from "react-icons/md";
 import { useRouter } from 'next/navigation';
@@ -55,19 +53,19 @@ const QuizForm = () => {
 
   return (
     <Flex width="full" align="center" justifyContent="center" p={8} h="100vh">
-      <Box p={8} maxWidth="700px" borderWidth={1} borderRadius={8} boxShadow="lg">
+      <Box p={8} maxWidth="700px" borderWidth={1} borderRadius={8} boxShadow="md">
         <Flex width="full" align="center" justifyContent="center">
           <Box textAlign="center" w='80%' pl='18%'>
-            <Heading color='teal.300'>Quiz Option</Heading>
+            <Heading size="3xl">Quiz Option</Heading>
           </Box>
           {/* testing */}
           <Box textAlign="right" pl='10%'>
-            <Popover>
+            {/* <Popover>
               <PopoverTrigger>
                 <IconButton
                   aria-label='Recent Result'
                   icon={<MdAccountBox size={30}/>}
-                  color='teal.300'
+                  color='teal.400'
                   variant="ghost"
                 />
               </PopoverTrigger>
@@ -100,7 +98,7 @@ const QuizForm = () => {
                   </TableContainer>
                 </PopoverBody>
               </PopoverContent>
-            </Popover>
+            </Popover> */}
           </Box>
         </Flex>
 

@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Stack, Box, Button, Text, Link, useToast, useDisclosure } from '@chakra-ui/react';
+import { Stack, Box, Text, Link, Center } from '@chakra-ui/react';
+import { Button } from '@/components/ui/button';
+import { Toaster, toaster } from '@/components/ui/toaster';
 import axios from 'axios';
 import Email from '../components/formContent/email';
 import Password from '../components/formContent/password';
@@ -22,12 +24,11 @@ const FormContent = () => {
   const [isUsernameEmpty, setUsernameEmpty] = useState(false);
   const [btnIsLoading, setBtnIsLoading] = useState(false);
   const router = useRouter();
-  const toast = useToast();
   const { currentAction, currentStatus } = useAppSelector(state => state.login.userAccess);
   const dispatch = useAppDispatch();
   const searchParamas = useSearchParams();
 
-  const { isOpen: signupConfirmIsOpen, onOpen: signupConfirmOpen, onClose: signupConfirmClose } = useDisclosure();
+  const [signupConfirmIsOpen, setSignupConfirmIsOpen] = useState(false);
   const cancelSignupConfirmRef = useRef<null | HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -44,29 +45,26 @@ const FormContent = () => {
           console.log('LoginForm fetch /tokenConfirm: Error: ', err);
           if (err.response.data.type === 'token_expired') {
             router.push('/');
-            toast({
-              position: 'top',
+            toaster.create({
               title: 'Error Occurred',
               description: "Token expired. Please try again.",
-              status: 'error',
+              type: 'error',
               duration: 3000,
-              isClosable: true,
+              
             });
           } else {
-            toast({
-              position: 'top',
+            toaster.create({
               title: 'Error Occurred',
               description: "Something went wrong. Please contact us.",
-              status: 'error',
+              type: 'error',
               duration: 3000,
-              isClosable: true,
             });
           }
         }
       }
     }
     confirmToken();
-  }, [BACKEND_URL, dispatch, router, searchParamas, toast])
+  }, [BACKEND_URL, dispatch, router, searchParamas])
 
   // Handle click login button
   const handleContinue = async (e: { preventDefault: () => void; }) => {
@@ -89,27 +87,23 @@ const FormContent = () => {
               if (currentAction === 'signup') {
                 const sendEmailResult = await axios.post(BACKEND_URL + '/user/confirmRegistration', {email}, {withCredentials: true});
                 console.log(sendEmailResult);
-                signupConfirmOpen();
+                setSignupConfirmIsOpen(true);
               } else if (currentAction === 'login') {
-                toast({
-                  position: 'top',
+                toaster.create({
                   title: 'The email doesn\'t belong to any account.',
                   description: (<p>Please sign up first.</p>),
-                  status: 'error',
+                  type: 'error',
                   duration: 3000,
-                  isClosable: true,
                 });
                 dispatch(replaceAction('signup'));
               }
             } else if (loginResult.data.result === 'email_existed') {
               if (currentAction === 'signup') {
-                toast({
-                  position: 'top',
+                toaster.create({
                   title: 'The email already belongs to an account.',
                   description: (<p>Please try to login.</p>),
-                  status: 'error',
+                  type: 'error',
                   duration: 3000,
-                  isClosable: true,
                 });
                 dispatch(replaceAction('login'));
               } else if (currentAction === 'login') {
@@ -118,13 +112,11 @@ const FormContent = () => {
             }
           } else {
             setBtnIsLoading(false);
-            toast({
-              position: 'top',
+            toaster.create({
               title: 'Email Not Valid',
               description: (<p>Please enter a valid email.</p>),
-              status: 'error',
+              type: 'error',
               duration: 3000,
-              isClosable: true,
             });
           }
 
@@ -132,13 +124,11 @@ const FormContent = () => {
           catch (err: any) {
             setBtnIsLoading(false);
             console.log('LoginForm fetch /confirmEmail: Error: ', err);
-            toast({
-              position: 'top',
+            toaster.create({
               title: 'Error Occurred',
               description: "Something went wrong when confirming your email.",
-              status: 'error',
+              type: 'error',
               duration: 3000,
-              isClosable: true,
             });
         }
       }
@@ -160,23 +150,19 @@ const FormContent = () => {
           setBtnIsLoading(false);
           console.log('LoginForm fetch /signIn: Error: ', err);
           if (err.response.data.type === 'user_not_found' || err.response.data.type === 'invalid_credentials') {
-            toast.closeAll();
-            toast({
-              position: 'top',
+            // test toast.closeAll()
+            toaster.create({
               title: 'Login Failed',
               description: (<p>Username or Password incorrect.<br />You can sign up or try again later.</p>),
-              status: 'error',
+              type: 'error',
               duration: 3000,
-              isClosable: true,
             });
           } else {
-            toast({
-              position: 'top',
+            toaster.create({
               title: 'Error Occurred',
               description: "Something went wrong when signing in.",
-              status: 'error',
+              type: 'error',
               duration: 3000,
-              isClosable: true,
             });
           }
         }
@@ -186,13 +172,11 @@ const FormContent = () => {
       if (!password) setPasswordEmpty(true);
       if (!username) setUsernameEmpty(true);
       if (!email) {
-        toast({
-          position: 'top',
+        toaster.create({
           title: 'Error Occurred',
           description: "This link may be expired or already used.",
-          status: 'error',
+          type: 'error',
           duration: 3000,
-          isClosable: true,
         });
       }
 
@@ -211,23 +195,19 @@ const FormContent = () => {
           setBtnIsLoading(false);
           console.log('LoginForm fetch /signUp: Error: ', err);
           if (err.response.data.type === 'email_already_exists') {
-            toast.closeAll();
-            toast({
-              position: 'top',
+            // test toast.closeAll();
+            toaster.create({
               title: 'Error Occurred',
               description: "Please choose a different username.",
-              status: 'error',
+              type: 'error',
               duration: 3000,
-              isClosable: true,
             });
           } else {
-            toast({
-              position: 'top',
+            toaster.create({
               title: 'Error Occurred',
               description: "Something went wrong when signing in.",
-              status: 'error',
+              type: 'error',
               duration: 3000,
-              isClosable: true,
             });
           }
         }
@@ -239,7 +219,8 @@ const FormContent = () => {
   // const handleGuest = () => {router.push('/quizform')};
 
   return (
-    <Box my={4} textAlign="left" width='30rem'>
+    <Box my={4} textAlign="left" width='26rem' maxW="full">
+      <Toaster />
       <form>
 
         {/* Email Input */}
@@ -253,24 +234,25 @@ const FormContent = () => {
         }
 
         {/* Submit Button */}
-        <Button
-          color='white' _hover={{ bg: 'teal' }} bg='teal.300' border='1px' borderColor='#ccd0d5' width="full" mt={4} type="submit" onClick={handleContinue}
-          isLoading={btnIsLoading}
+        <Button //color='white' _hover={{ bg: 'teal' }} bg='teal.400' border='1px' borderColor='#ccd0d5'
+          width="full" mt={4} type="submit" onClick={handleContinue}
+          loading={btnIsLoading} size="md"
         >
-          Continue
+          <Text textStyle="md">Continue</Text>
         </Button>
 
-        <Stack pt={6}>
-          <Text align={'center'} onClick={() => {
-            dispatch(replaceAction(currentAction === 'signup' ? 'login' : 'signup'))
-            dispatch(replaceStatus('email_input'));
-          }}
-            _hover={{ cursor: 'pointer' }}>
-            {currentAction === 'signup' ? 'Already have an account?' : "Don’t have an account?"} <Link color={'teal.500'}>{currentAction === 'signup' ? 'Login' : 'Sign Up'}</Link>
+        <Center pt={6}>
+          <Text>
+            {currentAction === 'signup' ? 'Already have an account? ' : "Don’t have an account? "}
+            <Link variant="underline" onClick={() => {
+                dispatch(replaceAction(currentAction === 'signup' ? 'login' : 'signup'))
+                dispatch(replaceStatus('email_input'));
+              }} _hover={{ cursor: 'pointer' }}
+            >{currentAction === 'signup' ? 'Login' : 'Sign Up'}</Link>
           </Text>
-        </Stack>
+        </Center>
 
-        <SignupConfirmAlert SignupConfirmIsOpen={signupConfirmIsOpen} SignupConfirmClose={signupConfirmClose} cancelSignupConfirmRef={cancelSignupConfirmRef} email={email} />
+        <SignupConfirmAlert SignupConfirmIsOpen={signupConfirmIsOpen} setSignupConfirmIsOpen={setSignupConfirmIsOpen} cancelSignupConfirmRef={cancelSignupConfirmRef} email={email} />
       </form>
     </Box>
   )
