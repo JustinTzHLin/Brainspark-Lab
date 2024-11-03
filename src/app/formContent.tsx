@@ -18,7 +18,6 @@ const FormContent = () => {
   const [email, setEmail] = useState('');
   const [isEmailEmpty, setEmailEmpty] = useState(false);
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [isPasswordEmpty, setPasswordEmpty] = useState(false);
   const [username, setUsername] = useState('');
   const [isUsernameEmpty, setUsernameEmpty] = useState(false);
@@ -46,9 +45,9 @@ const FormContent = () => {
           if (err.response.data.type === 'token_expired') {
             router.push('/');
             toaster.create({
-              title: 'Error Occurred',
+              title: 'Token Expired',
               description: "Token expired. Please try again.",
-              type: 'error',
+              type: 'warning',
               duration: 3000,
               
             });
@@ -66,7 +65,7 @@ const FormContent = () => {
     confirmToken();
   }, [BACKEND_URL, dispatch, router, searchParamas])
 
-  // Handle click login button
+  // Handle click continue button
   const handleContinue = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
@@ -81,32 +80,35 @@ const FormContent = () => {
           // Sign in process
           if (validator.isEmail(email)) {
             const loginResult = await axios.post(BACKEND_URL + '/user/emailConfirm', {email}, {withCredentials: true});
-            setBtnIsLoading(false);
             console.log(loginResult);
             if (loginResult.data.result === 'email_not_existed') {
               if (currentAction === 'signup') {
                 const sendEmailResult = await axios.post(BACKEND_URL + '/user/confirmRegistration', {email}, {withCredentials: true});
                 console.log(sendEmailResult);
+                setBtnIsLoading(false);
                 setSignupConfirmIsOpen(true);
               } else if (currentAction === 'login') {
+                setBtnIsLoading(false);
                 toaster.create({
                   title: 'The email doesn\'t belong to any account.',
                   description: (<p>Please sign up first.</p>),
-                  type: 'error',
+                  type: 'warning',
                   duration: 3000,
                 });
                 dispatch(replaceAction('signup'));
               }
             } else if (loginResult.data.result === 'email_existed') {
               if (currentAction === 'signup') {
+                setBtnIsLoading(false);
                 toaster.create({
                   title: 'The email already belongs to an account.',
                   description: (<p>Please try to login.</p>),
-                  type: 'error',
+                  type: 'warning',
                   duration: 3000,
                 });
                 dispatch(replaceAction('login'));
               } else if (currentAction === 'login') {
+                setBtnIsLoading(false);
                 dispatch(replaceStatus('password_input'));
               }
             }
@@ -115,7 +117,7 @@ const FormContent = () => {
             toaster.create({
               title: 'Email Not Valid',
               description: (<p>Please enter a valid email.</p>),
-              type: 'error',
+              type: 'warning',
               duration: 3000,
             });
           }
@@ -154,7 +156,7 @@ const FormContent = () => {
             toaster.create({
               title: 'Login Failed',
               description: (<p>Username or Password incorrect.<br />You can sign up or try again later.</p>),
-              type: 'error',
+              type: 'warning',
               duration: 3000,
             });
           } else {
@@ -197,9 +199,9 @@ const FormContent = () => {
           if (err.response.data.type === 'email_already_exists') {
             // test toast.closeAll();
             toaster.create({
-              title: 'Error Occurred',
-              description: "Please choose a different username.",
-              type: 'error',
+              title: 'Sign Up Failed',
+              description: "Please choose a different email.",
+              type: 'warning',
               duration: 3000,
             });
           } else {
@@ -226,10 +228,10 @@ const FormContent = () => {
         {/* Email Input */}
         {
           currentStatus === 'email_input' ? <Email setEmail={setEmail} isEmailEmpty={isEmailEmpty} setEmailEmpty={setEmailEmpty} />
-            : currentStatus === 'password_input' ? <Password setPassword={setPassword} isPasswordEmpty={isPasswordEmpty} setPasswordEmpty={setPasswordEmpty} showPassword={showPassword} handleView={() => {setShowPassword(!showPassword)}} />
+            : currentStatus === 'password_input' ? <Password setPassword={setPassword} isPasswordEmpty={isPasswordEmpty} setPasswordEmpty={setPasswordEmpty} />
             : currentStatus === 'initial_registration' ? <>
               <Username setUsername={setUsername} isUsernameEmpty={isUsernameEmpty} setUsernameEmpty={setUsernameEmpty} />
-              <Password setPassword={setPassword} isPasswordEmpty={isPasswordEmpty} setPasswordEmpty={setPasswordEmpty} showPassword={showPassword} handleView={() => {setShowPassword(!showPassword)}} />
+              <Password setPassword={setPassword} isPasswordEmpty={isPasswordEmpty} setPasswordEmpty={setPasswordEmpty} />
             </> : null
         }
 

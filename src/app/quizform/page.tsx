@@ -2,9 +2,7 @@
 import React, { useState } from 'react';
 import { useAppDispatch } from '@/lib/hooks'; 
 import { replaceQuiz } from '@/lib/features/quizSlice';
-import {
-  Flex, Box, Heading, IconButton,
-} from '@chakra-ui/react';
+import { Flex, Box, Heading, IconButton } from '@chakra-ui/react';
 import { MdAccountBox } from "react-icons/md";
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
@@ -52,9 +50,9 @@ const QuizForm = () => {
   };
 
   return (
-    <Flex width="full" align="center" justifyContent="center" p={8} h="100vh">
-      <Box p={8} maxWidth="700px" borderWidth={1} borderRadius={8} boxShadow="md">
-        <Flex width="full" align="center" justifyContent="center">
+    <Flex w="full" align="center" justifyContent="center" p={8} h="100vh">
+      <Box p={8} maxW="full" borderWidth={1} borderRadius={8} boxShadow="md">
+        <Flex w="full" align="center" justifyContent="center">
           <Box textAlign="center" w='80%' pl='18%'>
             <Heading size="3xl">Quiz Option</Heading>
           </Box>

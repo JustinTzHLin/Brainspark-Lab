@@ -2,9 +2,7 @@
 import React, { useRef, useState } from 'react';
 import he from 'he';
 import { useAppSelector } from '@/lib/hooks';
-import {
-  Flex, Spacer, Box, Heading, Stack, Center, Badge, Button, IconButton, useDisclosure, StackSeparator, Text
-} from '@chakra-ui/react';
+import { Flex, Spacer, Box, Heading, Stack, Center, Badge, Button, IconButton, StackSeparator, Text } from '@chakra-ui/react';
 import {
   DialogBackdrop,
   DialogBody,
@@ -28,11 +26,12 @@ import {
 import { Skeleton, SkeletonText } from "@/components/ui/skeleton"
 import { ProgressBar, ProgressRoot } from "@/components/ui/progress"
 import { Tooltip } from '@/components/ui/tooltip';
+import { Blockquote } from "@/components/ui/blockquote"
 import Image from 'next/image';
 import { BiSolidLeftArrow, BiSolidRightArrow  } from "react-icons/bi";
 import { LuInfo } from "react-icons/lu";
 import { useRouter } from 'next/navigation';
-import SubmitAnswerAlert from './submitAnswerAlert';
+import SubmitAnswerModal from './submitAnswerModal';
 import AnswerResultModal from './answerResultModal';
 
 const Quiz = () => {
@@ -52,7 +51,7 @@ const Quiz = () => {
     correct_answer: '',
     incorrect_answers: []
   });
-  const [buttonBorderColor, setButtonBorderColor] = useState(Array(4).fill('0px 0px 0px 0px #DD6B20 inset'));
+  const [buttonBorderColor, setButtonBorderColor] = useState(Array(4).fill('0px 0px 0px 0px #18181b inset'));
 
   // Shuffle options array
   const shuffleArray = (array: string[]) => {
@@ -75,8 +74,8 @@ const Quiz = () => {
   const handleSelectedChoice = (index: number) => {
     const newButtonBorder = [];
     for (let i=0; i<4; i++) {
-      if (i === index) newButtonBorder.push('0px 0px 0px 8px #DD6B20 inset');
-      else newButtonBorder.push('0px 0px 0px 0px #DD6B20 inset');
+      if (i === index) newButtonBorder.push('0px 0px 0px 5px #18181b inset');
+      else newButtonBorder.push('0px 0px 0px 0px #18181b inset');
     }
     setButtonBorderColor(newButtonBorder);
   }
@@ -94,7 +93,7 @@ const Quiz = () => {
     if (questionIndex < questionNumber) {
       setQuizIndex(questionIndex);
       setQuiz(data[questionIndex]);
-      setButtonBorderColor(Array(4).fill('0px 0px 0px 0px #DD6B20 inset'));
+      setButtonBorderColor(Array(4).fill('0px 0px 0px 0px #18181b inset'));
       const newOptions = shuffleArray([data[questionIndex].correct_answer].concat(data[questionIndex].incorrect_answers));
       setOptions(newOptions);
       for (let i = 0; i < newOptions.length; i++) {
@@ -180,15 +179,20 @@ const Quiz = () => {
       <Box p={8} width="510px" borderWidth={1} borderRadius={8} boxShadow="lg">
         <Flex width="full" align="center" justify="space-between">
           <Box>
-            <IconButton
-              variant="ghost"
-              aria-label="Gemini Icon Button"
-              onClick={askGemini}
-              rounded="full"
-              _active={{transform: 'scale(0.8)'}}
+            <Tooltip
+              content="Ask Gemini" showArrow openDelay={100} closeDelay={250}
+              positioning={{placement: 'right'}}
             >
-              <Image src="/geminiIcon.svg" alt="Gemini Icon" height={25} width={25}/>
-            </IconButton>
+              <IconButton
+                variant="ghost"
+                aria-label="Gemini Icon Button"
+                onClick={askGemini}
+                rounded="full"
+                _active={{transform: 'scale(0.8)'}}
+              >
+                <Image src="/geminiIcon.svg" alt="Gemini Icon" height={25} width={25}/>
+              </IconButton>
+            </Tooltip>
             <DialogRoot open={geminiModalIsOpen} onOpenChange={handleGeminiModalClose} placement="center" size="xl">
               <DialogBackdrop />
               <DialogContent>
@@ -241,7 +245,6 @@ const Quiz = () => {
           </Box>
           <Heading size='3xl' fontWeight="bold">Quiz {quizIndex+1}/{questionNumber}</Heading>
           <Box>
-            {/* test */}
             <PopoverRoot positioning={{ placement: "bottom-end" }} open={questionStatusIsOpen} onOpenChange={e => setQuestionStatusIsOpen(e.open)}>
               <PopoverTrigger>
                 <Button
@@ -260,12 +263,12 @@ const Quiz = () => {
                 <PopoverHeader textAlign='center' fontSize={24}><b>Quiz Status</b></PopoverHeader>
                 <PopoverBody>
                   <Center>
-                    <Box w={(40 + 6 * 2) * 7 + "px"}>
+                    <Box w={(36 + 6 * 2) * 8 + "px"}>
                       {userAnswers.map((userAnswer, i) => {
                         return (
                           <Button
-                            w='40px' key={'quizStatusButton' + i} m='6px' onClick={() => {handleChangeQuestion(i); setQuestionStatusIsOpen(false);}}
-                            variant={userAnswer === '' ? "surface" : "solid"}
+                            w='36px' key={'quizStatusButton' + i} m='6px' size='sm' variant={userAnswer === '' ? "surface" : "solid"}
+                            onClick={() => {handleChangeQuestion(i); setQuestionStatusIsOpen(false);}} _active={{transform: 'scale(0.8)'}}
                           >
                             {i+1}
                           </Button>
@@ -286,33 +289,33 @@ const Quiz = () => {
             content={quiz.category} showArrow openDelay={100} closeDelay={250}
             positioning={{offset: {mainAxis: 3}}}
           >
-            <Badge w='46%' fontSize={15} textAlign='center' variant='surface' colorPalette='green' _hover={{cursor: 'pointer'}}>
+            <Badge w='46%' fontSize={15} textAlign='center' _hover={{cursor: 'pointer'}} h={6}>
               <Center w="full">
                 {quiz.category.startsWith('Entertainment') ? 'Entertainment' : he.decode(quiz.category)}
               </Center>
             </Badge>
           </Tooltip>
           <Spacer />
-          <Badge w='22%' fontSize={15} textAlign='center' variant='surface' colorPalette='red'>
+          <Badge w='22%' fontSize={15} textAlign='center' h={6}>
           <Center w="full">{quiz.difficulty}</Center>
           </Badge>
           <Spacer />
-          <Badge w='22%' fontSize={15} textAlign='center' variant='surface' colorPalette='purple'>
+          <Badge w='22%' fontSize={15} textAlign='center' h={6}>
           <Center w="full">{quiz.type}</Center>
           </Badge>
         </Flex>
-        <Center my={4} textAlign="left" width='full' bg='gray.500' py={3} pl={3.5} pr={3.5} borderRadius={10}>
-          <Box textAlign="left" w='30rem' bg='white' p={2} borderRadius={6} h='8rem'>
+        <Blockquote variant="solid" my={4} pr={0}>
+          <Center w="full" h="8rem" fontSize={18}>
             <b>{he.decode(quiz.question)}</b>
-          </Box>
-        </Center>
+          </Center>
+        </Blockquote>
         {
           Array.from({length: options.length}).map((_, i) => {
             return (
               <Button
-                key={'quiz_option_'+i} width='full' my={2} fontSize={20} boxShadow={buttonBorderColor[i]}
-                height={options.length === 4 ? '48px' : '112px'} variant="subtle"
-                //colorScheme={['whatsapp', 'twitter', 'purple', 'pink'][i]}
+                key={'quiz_option_'+i} width='full' my={2} boxShadow={buttonBorderColor[i]}
+                height={options.length === 4 ? '48px' : '112px'} variant="ghost"
+                fontSize={options[i].length > 60 ? 13 : options[i].length > 40 ? 16 : 20}
                 _active={{transform: 'scale(0.9)'}} onClick={() => selectOption(i)}
               >
                 <b>{he.decode(options[i])}</b>
@@ -330,8 +333,8 @@ const Quiz = () => {
         </Flex>
       </Box>
 
-      {/* Submit Answer Alert */}
-      <SubmitAnswerAlert submitAnswerIsOpen={submitAnswerIsOpen} setSubmitAnswerIsOpen={setSubmitAnswerIsOpen} cancelSubmitAnswerRef={cancelSubmitAnswerRef} checkAnswers={checkAnswers} />
+      {/* Submit Answer Modal */}
+      <SubmitAnswerModal submitAnswerIsOpen={submitAnswerIsOpen} setSubmitAnswerIsOpen={setSubmitAnswerIsOpen} cancelSubmitAnswerRef={cancelSubmitAnswerRef} checkAnswers={checkAnswers} />
 
       {/* Answer Result Modal */}
       <AnswerResultModal checkAnswer={checkAnswer} setCheckAnswer={setCheckAnswer} router={router} questionNumber={questionNumber} correctCount={correctCount} />

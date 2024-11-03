@@ -1,4 +1,4 @@
-import { Box, Button, Fieldset, Text } from '@chakra-ui/react';
+import { Box, Button, Text } from '@chakra-ui/react';
 import NumberOfQuestions from '../../components/quizFormContent/numberOfQuestions';
 import Category from '../../components/quizFormContent/category';
 import QuestionType from '../../components/quizFormContent/questiontype';
@@ -17,9 +17,7 @@ interface QuizFormContentProps {
 
 const QuizFormContent: React.FC<QuizFormContentProps> = ({ questionNumber, setQuestionNumber, setCategory, difficulty, setDifficulty, questionTypes, setQuestionTypes, handleStartQuiz }) => {
   return (
-    <Box my={4} textAlign="left" w="26rem">
-      <Fieldset.Root>
-        <Fieldset.Content w="26rem">
+    <Box my={4} textAlign="left" w="26rem" maxW='full'>
 
           {/* Number of Questions */}
           <NumberOfQuestions questionNumber={questionNumber} setQuestionNumber={setQuestionNumber} />
@@ -34,11 +32,9 @@ const QuizFormContent: React.FC<QuizFormContentProps> = ({ questionNumber, setQu
           <QuestionType questionTypes={questionTypes} setQuestionTypes={setQuestionTypes} />
 
           {/* Start Quiz Button */}
-          <Button width="full" mt={6} onClick={handleStartQuiz}>
+          <Button w="full" mt={8} onClick={handleStartQuiz}>
             <Text fontSize="md"><b>S t a r t&nbsp;&nbsp;&nbsp;&nbsp;Q u i z !</b></Text>
           </Button>
-        </Fieldset.Content>
-      </Fieldset.Root>
     </Box>
   )
 }

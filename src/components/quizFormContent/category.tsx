@@ -53,7 +53,7 @@ const Category: React.FC<CategoryProps> = ({ setCategory }) => {
   return (
     <Field mt={6} label='Category'>
       <Flex w="100%">
-        <Center width='2.75rem' borderColor='gray.200' borderWidth='1px' borderRadius='0.375rem'
+        <Center width='2.5rem' borderColor='gray.200' borderWidth='1px' borderRadius='0.375rem'
         borderTopRightRadius={0} borderBottomRightRadius={0} borderRightWidth={0}>
           <Icon boxSize={5}>
             <BiSolidCategoryAlt />
@@ -73,14 +73,14 @@ const Category: React.FC<CategoryProps> = ({ setCategory }) => {
             {categories.map((categoryObj) => (<MenuItem key={'categoryOption'+categoryObj.value} value={categoryObj.value} onClick={() => {setCategory(categoryObj.value); setCategoryDisplay(categoryObj.label);}}>{categoryObj.label}</MenuItem>))}
           </MenuContent>
         </MenuRoot> */}
-        <SelectRoot collection={categories} size="md" value={categoryDisplay} onValueChange={(e) => {setCategory(e.value[0]); setCategoryDisplay(e.value);}}>
+        <SelectRoot w="calc(100% - 2.5rem)" collection={categories} size="md" value={categoryDisplay} onValueChange={(e) => {setCategory(e.value[0]); setCategoryDisplay(e.value);}}>
           <SelectTrigger>
-            <SelectValueText placeholder='Any Category' />
+            <Center w="full"><SelectValueText placeholder='Any Category' /></Center>
           </SelectTrigger>
           <SelectContent>
             {categories.items.map((categoryObj) => (
               <SelectItem item={categoryObj} key={categoryObj.value}>
-                {categoryObj.label}
+                <Center w="full">{categoryObj.label}</Center>
               </SelectItem>
             ))}
           </SelectContent>

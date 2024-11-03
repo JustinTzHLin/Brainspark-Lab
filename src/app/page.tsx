@@ -32,7 +32,7 @@ const LogInForm = () => {
   }, [BACKEND_URL, dispatch, router])
 
   return (
-    <Flex width="100%" align="center" justifyContent="center" p={8} height="100vh">
+    <Flex w="full" align="center" justifyContent="center" p={8} height="100vh">
       <VerifyLoggedInModal />
       <Box p={8} maxW="full" borderWidth={1} borderRadius={8} boxShadow="md"> 
         <Box textAlign="center">
@@ -40,7 +40,7 @@ const LogInForm = () => {
         </Box>
 
         {/* Login Form Content */}
-        <Suspense fallback={<Box width="26rem" height="216px" maxW="full"></Box>}>
+        <Suspense fallback={<Box w="26rem" height="216px" maxW="full"></Box>}>
           <FormContent />
         </Suspense>
       </Box>

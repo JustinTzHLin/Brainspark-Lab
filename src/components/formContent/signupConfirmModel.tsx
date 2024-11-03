@@ -35,7 +35,7 @@ const SignupConfirmAlert: React.FC<SignupConfirmAlertProps> = ({ SignupConfirmIs
           Your registration is almost complete. We’ve sent a confirmation email to <b>{email}</b>. Please check your inbox and click the link in the email to activate your account and start enjoying Trivioasis.
         </DialogBody>
         <DialogFooter>
-          <Button ref={cancelSignupConfirmRef} onClick={() => setSignupConfirmIsOpen(false)}>
+          <Button ref={cancelSignupConfirmRef} onClick={() => setSignupConfirmIsOpen(false)} variant='subtle'>
             Ok
           </Button>
         </DialogFooter>

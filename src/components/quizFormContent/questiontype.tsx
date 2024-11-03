@@ -13,13 +13,13 @@ const QuestionType: React.FC<QuestionTypeProps> = ({ questionTypes, setQuestionT
     <>
       <Field mt={6} label='Question Type'>
       </Field>
-      <Flex w="full" h={10} mt={-2.5}>
-        <Center width='2.75rem' borderColor='gray.200' borderWidth='1px' borderRadius='0.375rem' borderTopRightRadius={0} borderBottomRightRadius={0} borderRightWidth={0}>
+      <Flex w="full" h={10} mt={1.5}>
+        <Center width='2.5rem' borderColor='gray.200' borderWidth='1px' borderRadius='0.375rem' borderTopRightRadius={0} borderBottomRightRadius={0} borderRightWidth={0}>
           <Icon boxSize={5}>
             <BsUiRadios />
           </Icon>
         </Center>
-        <Center borderWidth='1px' borderRadius='md' width='100%' borderTopLeftRadius={0} borderBottomLeftRadius={0}>
+        <Center w="calc(100% - 2.5rem)" borderWidth='1px' borderRadius='md' borderTopLeftRadius={0} borderBottomLeftRadius={0}>
           <Stack direction='row' gap={4}>
             <Checkbox checked={questionTypes[0]} onCheckedChange={() => setQuestionTypes([true, false, false])}>
               Any

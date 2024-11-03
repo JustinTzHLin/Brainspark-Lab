@@ -1,27 +1,16 @@
-// import {
-//   AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogBody, AlertDialogCloseButton, Button
-// } from "@chakra-ui/react";
 import {
-  DialogBackdrop,
-  DialogBody,
-  DialogCloseTrigger,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogRoot,
-  DialogTitle,
-  DialogTrigger,
+  DialogBackdrop, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-interface SubmitAnswerAlertProps {
+interface SubmitAnswerModalProps {
   submitAnswerIsOpen: boolean,
   setSubmitAnswerIsOpen: (arg0: boolean) => void,
   cancelSubmitAnswerRef: any,
   checkAnswers: () => void
 }
 
-const SubmitAnswerAlert: React.FC<SubmitAnswerAlertProps> = ({ submitAnswerIsOpen, setSubmitAnswerIsOpen, cancelSubmitAnswerRef, checkAnswers }) => {
+const SubmitAnswerModal: React.FC<SubmitAnswerModalProps> = ({ submitAnswerIsOpen, setSubmitAnswerIsOpen, cancelSubmitAnswerRef, checkAnswers }) => {
 
   return (
     <DialogRoot motionPreset='scale' onOpenChange={e => setSubmitAnswerIsOpen(e.open)} open={submitAnswerIsOpen} placement='center'> {/* initialFocusEl={cancelSubmitAnswerRef} */}
@@ -35,10 +24,10 @@ const SubmitAnswerAlert: React.FC<SubmitAnswerAlertProps> = ({ submitAnswerIsOpe
           Double-check your answers, for once you submit, there&apos;s no turning back!
         </DialogBody>
         <DialogFooter>
-          <Button ref={cancelSubmitAnswerRef} onClick={() => setSubmitAnswerIsOpen(false)}>
+          <Button ref={cancelSubmitAnswerRef} onClick={() => setSubmitAnswerIsOpen(false)} variant='subtle'>
             Nah
           </Button>
-          <Button colorScheme='green' onClick={() => checkAnswers()} ml={3}>
+          <Button onClick={() => checkAnswers()} ml={3}>
             Sure thing!
           </Button>
         </DialogFooter>
@@ -47,4 +36,4 @@ const SubmitAnswerAlert: React.FC<SubmitAnswerAlertProps> = ({ submitAnswerIsOpe
   )
 }
 
-export default SubmitAnswerAlert;
+export default SubmitAnswerModal;

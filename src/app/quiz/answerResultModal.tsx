@@ -1,14 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
-  DialogBackdrop,
-  DialogBody,
-  DialogCloseTrigger,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogRoot,
-  DialogTitle,
-  DialogTrigger,
+  DialogBackdrop, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger
 } from "@/components/ui/dialog";
 
 interface AnswerResultModalProps {
@@ -22,42 +14,25 @@ interface AnswerResultModalProps {
 const AnswerResultModal: React.FC<AnswerResultModalProps> = ({ checkAnswer, setCheckAnswer, router, questionNumber, correctCount }) => {
 
   return (
-    <DialogRoot open={checkAnswer} onOpenChange={e => setCheckAnswer(e.open)}>
+    <DialogRoot open={checkAnswer} onOpenChange={e => setCheckAnswer(e.open)} placement='center' onExitComplete={() => router.replace('/quizform')}>
       <DialogBackdrop />
       <DialogTrigger />
       <DialogContent>
         <DialogCloseTrigger />
         <DialogHeader>
-          <DialogTitle>Modal Title</DialogTitle>
+          <DialogTitle>Quiz Score</DialogTitle>
         </DialogHeader>
         <DialogBody>
           You got {correctCount} out of {questionNumber} correct!
           That&apos;s a perfect score!
         </DialogBody>
         <DialogFooter>
-          <Button colorScheme='blue' mr={3} onClick={() => {router.push('/quizform')}}>
+          <Button mr={3} onClick={() => {router.replace('/quizform')}} variant='subtle'>
             New Quiz
           </Button>
         </DialogFooter>
       </DialogContent>
     </DialogRoot>
-    // migrate
-    // <Modal isOpen={checkAnswer} onClose={checkAnswerClose}>
-    //   <ModalOverlay />
-    //   <ModalContent>
-    //     <ModalHeader>Modal Title</ModalHeader>
-    //     <ModalCloseButton />
-    //     <ModalBody>
-    //       You got {correctCount} out of {questionNumber} correct!
-    //       That&apos;s a perfect score!
-    //     </ModalBody>
-    //     <ModalFooter>
-    //       <Button colorScheme='blue' mr={3} onClick={() => {router.push('/quizform')}}>
-    //         New Quiz
-    //       </Button>
-    //     </ModalFooter>
-    //   </ModalContent>
-    // </Modal>
   )
 }
 
