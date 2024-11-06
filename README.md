@@ -1,19 +1,20 @@
 # Brainspark-Lab
+
 This is the frontend repository of Brainspark-Lab. To view the backend, please visit [here](https://github.com/JustinTzHLin/Brainspark-Lab-Backend).
 
-
 ## Table of Contents
+
 1. [About](#about-brainspark-lab)
 2. [How it Works](#how-it-works)
 3. [Getting Started](#getting-started-with-brainspark-lab)
 4. [License](#license)
 
-
 ## About Brainspark-Lab
+
 Make it easy and relaxing to gain new knowledge.
 
-
 ## How it Works
+
 Brainspark-Lab is built with:
 
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://www.javascript.com/)
@@ -28,10 +29,10 @@ Brainspark-Lab is built with:
 [![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)](https://jwt.io/)
 [![Gemini](https://img.shields.io/badge/Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white)](https://gemini.google.com/)
 
-
 ## Getting Started With Brainspark-Lab
+
 Visit https://brainspark-lab.vercel.app/ and have fun!
 
-
 ## License
+
 This product is licensed under the MIT License without restriction.

@@ -1,63 +1,78 @@
-'use client';
-import React, { useState } from 'react';
-import { useAppDispatch } from '@/lib/hooks'; 
-import { replaceQuiz } from '@/lib/features/quizSlice';
-import { Flex, Box, Heading, IconButton } from '@chakra-ui/react';
+"use client";
+import React, { useState } from "react";
+import { useAppDispatch } from "@/lib/hooks";
+import { replaceQuiz } from "@/lib/features/quizSlice";
+import { Flex, Box, Heading, IconButton } from "@chakra-ui/react";
 import { MdAccountBox } from "react-icons/md";
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
-import QuizFormContent from './quizFormContent';
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import QuizFormContent from "./components/quizFormContent";
 
 const QuizForm = () => {
   const [questionNumber, setQuestionNumber] = useState(10);
-  const [category, setCategory] = useState('any');
-  const [difficulty, setDifficulty] = useState('any');
+  const [category, setCategory] = useState("any");
+  const [difficulty, setDifficulty] = useState("any");
   const [questionTypes, setQuestionTypes] = useState([true, false, false]);
-  const questionType = ['any', 'multiple', 'boolean'].filter((el, i) => questionTypes[i])[0];
+  const questionType = ["any", "multiple", "boolean"].filter(
+    (el, i) => questionTypes[i],
+  )[0];
   const router = useRouter();
 
   const [recentQuestionNumber, setRecentQuestionNumber] = useState(10);
-  const [recentCategory, setRecentCategory] = useState('any');
-  const [recentDifficulty, setRecentDifficulty] = useState('any');
-  const [recentQuestionType, setRecentQuestionType] = useState('any');
+  const [recentCategory, setRecentCategory] = useState("any");
+  const [recentDifficulty, setRecentDifficulty] = useState("any");
+  const [recentQuestionType, setRecentQuestionType] = useState("any");
 
   const dispatch = useAppDispatch();
 
   // Handle click start quiz
   const handleStartQuiz = async () => {
-
     // Create api string
-    let triviaApiString = 'https://opentdb.com/api.php?';
+    let triviaApiString = "https://opentdb.com/api.php?";
     console.log(questionNumber);
     console.log(category);
     console.log(difficulty);
     console.log(questionType);
     triviaApiString += `amount=${questionNumber}`;
-    triviaApiString += category !== 'any' ? `&category=${category}` : '';
-    triviaApiString += difficulty !== 'any' ? `&difficulty=${difficulty}` : '';
-    triviaApiString += questionTypes[1] ? '&type=multiple' : questionTypes[2] ? '&type=boolean' : '';
+    triviaApiString += category !== "any" ? `&category=${category}` : "";
+    triviaApiString += difficulty !== "any" ? `&difficulty=${difficulty}` : "";
+    triviaApiString += questionTypes[1]
+      ? "&type=multiple"
+      : questionTypes[2]
+        ? "&type=boolean"
+        : "";
     console.log(triviaApiString);
 
     // Fetch quiz and update quiz state
     try {
       const fetchQuizResult = await axios(triviaApiString);
-      console.log(fetchQuizResult)
+      console.log(fetchQuizResult);
       if (fetchQuizResult.data.response_code === 0) {
-        dispatch(replaceQuiz({questionNumber, category, difficulty, questionType, data: fetchQuizResult.data.results}));
-        router.push('/quiz');
+        dispatch(
+          replaceQuiz({
+            questionNumber,
+            category,
+            difficulty,
+            questionType,
+            data: fetchQuizResult.data.results,
+          }),
+        );
+        router.push("/quiz");
       }
-    } catch (err) {console.log('QuizForm fetch api Error: ', err)}
+    } catch (err) {
+      console.log("QuizForm fetch api Error: ", err);
+    }
   };
 
   return (
-    <Flex w="full" align="center" justifyContent="center" p={8} h="100vh">
+    <Flex w="full" align="center" justifyContent="center" h="100vh">
       <Box p={8} maxW="full" borderWidth={1} borderRadius={8} boxShadow="md">
         <Flex w="full" align="center" justifyContent="center">
-          <Box textAlign="center" w='80%' pl='18%'>
+          <Box textAlign="center" w="80%" pl="18%">
             <Heading size="3xl">Quiz Option</Heading>
           </Box>
           {/* testing */}
-          <Box textAlign="right" pl='10%'>
+          <Box textAlign="right" pl="10%">
             {/* <Popover>
               <PopoverTrigger>
                 <IconButton
@@ -102,9 +117,14 @@ const QuizForm = () => {
 
         {/* Quiz Form Content */}
         <QuizFormContent
-          questionNumber={questionNumber} setQuestionNumber={setQuestionNumber} setCategory={setCategory}
-          difficulty={difficulty} setDifficulty={setDifficulty} handleStartQuiz={handleStartQuiz}
-          questionTypes={questionTypes} setQuestionTypes={setQuestionTypes}
+          questionNumber={questionNumber}
+          setQuestionNumber={setQuestionNumber}
+          setCategory={setCategory}
+          difficulty={difficulty}
+          setDifficulty={setDifficulty}
+          handleStartQuiz={handleStartQuiz}
+          questionTypes={questionTypes}
+          setQuestionTypes={setQuestionTypes}
         />
       </Box>
     </Flex>

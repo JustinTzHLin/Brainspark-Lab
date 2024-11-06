@@ -1,42 +1,47 @@
-import { createSlice, PayloadAction, Slice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, Slice } from "@reduxjs/toolkit";
 
 export interface loginState {
   userAccess: {
-    currentAction: string,
-    currentStatus: string,
-    loggedIn: boolean,
-    isLoadingModalOpen: boolean
-  }
+    currentAction: string;
+    currentStatus: string;
+    loggedIn: boolean;
+    isLoadingModalOpen: boolean;
+  };
 }
 
 const initialState: loginState = {
   userAccess: {
-    currentAction: 'login', // login || signup
-    currentStatus: 'email_input', // email_input || password_inut || initial_registration
+    currentAction: "login", // login || signup
+    currentStatus: "email_input", // email_input || password_inut || initial_registration
     loggedIn: false,
-    isLoadingModalOpen: false
+    isLoadingModalOpen: true,
   },
-}
+};
 
 export const loginSlice: Slice<loginState> = createSlice({
-  name: 'login',
+  name: "login",
   initialState,
   reducers: {
     replaceAction: (state, action: PayloadAction<string>) => {
-      state.userAccess.currentAction = action.payload
+      state.userAccess.currentAction = action.payload;
     },
     replaceStatus: (state, action: PayloadAction<string>) => {
-      state.userAccess.currentStatus = action.payload
+      state.userAccess.currentStatus = action.payload;
     },
     replaceLoggedIn: (state, action: PayloadAction<boolean>) => {
-      state.userAccess.loggedIn = action.payload
+      state.userAccess.loggedIn = action.payload;
     },
     replaceIsLoadingModalOpen: (state, action: PayloadAction<boolean>) => {
-      state.userAccess.isLoadingModalOpen = action.payload
+      state.userAccess.isLoadingModalOpen = action.payload;
     },
   },
-})
+});
 
-export const { replaceAction, replaceStatus, replaceLoggedIn, replaceIsLoadingModalOpen } = loginSlice.actions
+export const {
+  replaceAction,
+  replaceStatus,
+  replaceLoggedIn,
+  replaceIsLoadingModalOpen,
+} = loginSlice.actions;
 
-export default loginSlice.reducer
+export default loginSlice.reducer;

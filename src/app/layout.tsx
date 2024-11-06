@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ChakraProviders } from './providers/chakraProviders';
-import StoreProvider from './providers/StoreProvider';
+import { ChakraProviders } from "./providers/chakraProviders";
+import StoreProvider from "./providers/StoreProvider";
 // import "./globals.css";
 
 // const inter = Inter({ subsets: ["latin"] });
@@ -18,13 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-      </head>
+      <head></head>
       <body>
         <StoreProvider>
-          <ChakraProviders>
-            {children}
-          </ChakraProviders>
+          <ChakraProviders>{children}</ChakraProviders>
         </StoreProvider>
       </body>
     </html>
