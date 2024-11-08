@@ -1,8 +1,8 @@
 import { Box, Button, Text } from "@chakra-ui/react";
-import NumberOfQuestions from "./numberOfQuestions";
-import Category from "./category";
-import QuestionType from "./questiontype";
-import Difficulty from "./difficulty";
+import NumberOfQuestionsInput from "./quizFormContent/numberOfQuestionsInput";
+import CategorySelect from "./quizFormContent/categorySelect";
+import QuestionTypeCheckbox from "./quizFormContent/questiontypeCheckbox";
+import DifficultyRadio from "./quizFormContent/difficultyRadio";
 
 interface QuizFormContentProps {
   questionNumber: number;
@@ -28,19 +28,19 @@ const QuizFormContent: React.FC<QuizFormContentProps> = ({
   return (
     <Box my={6} w="26rem" maxW="full">
       {/* Number of Questions */}
-      <NumberOfQuestions
+      <NumberOfQuestionsInput
         questionNumber={questionNumber}
         setQuestionNumber={setQuestionNumber}
       />
 
       {/* Category */}
-      <Category setCategory={setCategory} />
+      <CategorySelect setCategory={setCategory} />
 
       {/* Difficulty */}
-      <Difficulty difficulty={difficulty} setDifficulty={setDifficulty} />
+      <DifficultyRadio difficulty={difficulty} setDifficulty={setDifficulty} />
 
       {/* Question Type */}
-      <QuestionType
+      <QuestionTypeCheckbox
         questionTypes={questionTypes}
         setQuestionTypes={setQuestionTypes}
       />

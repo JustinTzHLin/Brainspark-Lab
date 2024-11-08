@@ -1,17 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Stack, Box, Text, Link, Center } from "@chakra-ui/react";
+import { Box, Text, Link, Center } from "@chakra-ui/react";
 import { Button } from "@/components/ui/button";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import axios from "axios";
-import Email from "./email";
-import Password from "./password";
-import Username from "./username";
-import SignupConfirmAlert from "./signupConfirmModel";
+import EmailInput from "./formContent/emailInput";
+import PwdInput from "./formContent/pwdInput";
+import UsernameInput from "./formContent/usernameInput";
+import SignupConfirmModal from "../modals/signupConfirmModel";
 import { useAppSelector } from "@/lib/hooks";
 import { useAppDispatch } from "@/lib/hooks";
 import validator from "validator";
 import { replaceAction, replaceStatus } from "@/lib/features/loginSlice";
+import { replaceIsLoadingModalOpen } from "@/lib/features/loginSlice";
+import { initialStatusConfirm } from "@/utils/quizFormHandler";
 
 const FormContent = () => {
   const BACKEND_URL =
@@ -25,7 +27,7 @@ const FormContent = () => {
   const [btnIsLoading, setBtnIsLoading] = useState(false);
   const router = useRouter();
   const { currentAction, currentStatus } = useAppSelector(
-    (state) => state.login.userAccess,
+    (state) => state.login.userAccess
   );
   const dispatch = useAppDispatch();
   const searchParamas = useSearchParams();
@@ -34,41 +36,18 @@ const FormContent = () => {
   const cancelSignupConfirmRef = useRef<null | HTMLButtonElement>(null);
 
   useEffect(() => {
-    const confirmToken = async () => {
-      const token = searchParamas.get("token");
-      if (token) {
-        try {
-          const tokenConfirmResult = await axios.post(
-            BACKEND_URL + "/user/tokenConfirm",
-            { token },
-            { withCredentials: true },
-          );
-          console.log(tokenConfirmResult);
-          setEmail(tokenConfirmResult.data.useremail);
-          dispatch(replaceStatus("initial_registration"));
-          dispatch(replaceAction("signup"));
-        } catch (err: any) {
-          console.log("LoginForm fetch /tokenConfirm: Error: ", err);
-          if (err.response.data.type === "token_expired") {
-            router.push("/");
-            toaster.create({
-              title: "Token Expired",
-              description: "Token expired. Please try again.",
-              type: "warning",
-              duration: 3000,
-            });
-          } else {
-            toaster.create({
-              title: "Error Occurred",
-              description: "Something went wrong. Please contact us.",
-              type: "error",
-              duration: 3000,
-            });
-          }
-        }
-      }
-    };
-    confirmToken();
+    const token = searchParamas.get("token");
+    dispatch(replaceIsLoadingModalOpen(true));
+    initialStatusConfirm(
+      token,
+      BACKEND_URL,
+      setEmail,
+      router,
+      dispatch,
+      replaceStatus,
+      replaceAction,
+      replaceIsLoadingModalOpen
+    );
   }, [BACKEND_URL, dispatch, router, searchParamas]);
 
   // Handle click continue button
@@ -87,7 +66,7 @@ const FormContent = () => {
             const loginResult = await axios.post(
               BACKEND_URL + "/user/emailConfirm",
               { email },
-              { withCredentials: true },
+              { withCredentials: true }
             );
             console.log(loginResult);
             if (loginResult.data.result === "email_not_existed") {
@@ -95,7 +74,7 @@ const FormContent = () => {
                 const sendEmailResult = await axios.post(
                   BACKEND_URL + "/user/confirmRegistration",
                   { email },
-                  { withCredentials: true },
+                  { withCredentials: true }
                 );
                 console.log(sendEmailResult);
                 setBtnIsLoading(false);
@@ -156,7 +135,7 @@ const FormContent = () => {
           const loginResult = await axios.post(
             BACKEND_URL + "/user/signIn",
             { password, email },
-            { withCredentials: true },
+            { withCredentials: true }
           );
           console.log(loginResult);
           router.push("/quizform");
@@ -213,7 +192,7 @@ const FormContent = () => {
           const signUpResult = await axios.post(
             BACKEND_URL + "/user/signUp",
             { username, password, email },
-            { withCredentials: true },
+            { withCredentials: true }
           );
           console.log(signUpResult);
           router.push("/quizform");
@@ -252,26 +231,26 @@ const FormContent = () => {
       <form>
         {/* Email Input */}
         {currentStatus === "email_input" ? (
-          <Email
+          <EmailInput
             setEmail={setEmail}
             isEmailEmpty={isEmailEmpty}
             setEmailEmpty={setEmailEmpty}
             email={email}
           />
         ) : currentStatus === "password_input" ? (
-          <Password
+          <PwdInput
             setPassword={setPassword}
             isPasswordEmpty={isPasswordEmpty}
             setPasswordEmpty={setPasswordEmpty}
           />
         ) : currentStatus === "initial_registration" ? (
           <>
-            <Username
+            <UsernameInput
               setUsername={setUsername}
               isUsernameEmpty={isUsernameEmpty}
               setUsernameEmpty={setUsernameEmpty}
             />
-            <Password
+            <PwdInput
               setPassword={setPassword}
               isPasswordEmpty={isPasswordEmpty}
               setPasswordEmpty={setPasswordEmpty}
@@ -300,9 +279,7 @@ const FormContent = () => {
               variant="underline"
               onClick={() => {
                 dispatch(
-                  replaceAction(
-                    currentAction === "signup" ? "login" : "signup",
-                  ),
+                  replaceAction(currentAction === "signup" ? "login" : "signup")
                 );
                 dispatch(replaceStatus("email_input"));
               }}
@@ -313,7 +290,7 @@ const FormContent = () => {
           </Text>
         </Center>
 
-        <SignupConfirmAlert
+        <SignupConfirmModal
           SignupConfirmIsOpen={signupConfirmIsOpen}
           setSignupConfirmIsOpen={setSignupConfirmIsOpen}
           cancelSignupConfirmRef={cancelSignupConfirmRef}

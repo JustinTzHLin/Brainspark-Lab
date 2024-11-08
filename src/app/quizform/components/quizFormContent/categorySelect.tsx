@@ -1,27 +1,20 @@
 import React, { useState } from "react";
-import {
-  Flex,
-  Icon,
-  Button,
-  Center,
-  createListCollection,
-} from "@chakra-ui/react";
+import { Flex, Icon, Center, createListCollection } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import {
   SelectContent,
   SelectItem,
-  SelectLabel,
   SelectRoot,
   SelectTrigger,
   SelectValueText,
 } from "@/components/ui/select";
 import { BiSolidCategoryAlt } from "react-icons/bi";
 
-interface CategoryProps {
+interface CategorySelectProps {
   setCategory: (nextValue: string) => void;
 }
 
-const Category: React.FC<CategoryProps> = ({ setCategory }) => {
+const CategorySelect: React.FC<CategorySelectProps> = ({ setCategory }) => {
   const [categoryDisplay, setCategoryDisplay] = useState(["Any Category"]);
   const categories = createListCollection({
     items: [
@@ -97,4 +90,4 @@ const Category: React.FC<CategoryProps> = ({ setCategory }) => {
   );
 };
 
-export default Category;
+export default CategorySelect;

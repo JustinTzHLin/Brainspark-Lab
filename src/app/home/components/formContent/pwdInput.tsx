@@ -4,13 +4,13 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { Field } from "@/components/ui/field";
 import { LuLock } from "react-icons/lu";
 
-interface PasswordProps {
+interface PwdInputProps {
   setPassword: (nextValue: string) => void;
   isPasswordEmpty: boolean;
   setPasswordEmpty: (nextValue: boolean) => void;
 }
 
-const Password: React.FC<PasswordProps> = ({
+const PwdInput: React.FC<PwdInputProps> = ({
   setPassword,
   isPasswordEmpty,
   setPasswordEmpty,
@@ -35,4 +35,4 @@ const Password: React.FC<PasswordProps> = ({
   );
 };
 
-export default Password;
+export default PwdInput;

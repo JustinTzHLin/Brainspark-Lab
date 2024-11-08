@@ -8,7 +8,6 @@ import {
   DialogHeader,
   DialogRoot,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 
 interface AnswerResultModalProps {
@@ -34,7 +33,6 @@ const AnswerResultModal: React.FC<AnswerResultModalProps> = ({
       onExitComplete={() => router.replace("/quizform")}
     >
       <DialogBackdrop />
-      <DialogTrigger />
       <DialogContent>
         <DialogCloseTrigger />
         <DialogHeader>

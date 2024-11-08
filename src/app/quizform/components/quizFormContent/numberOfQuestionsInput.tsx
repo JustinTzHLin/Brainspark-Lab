@@ -13,12 +13,12 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { RiNumbersFill } from "react-icons/ri";
 
-interface NumberOfQuestionsProps {
+interface NNumberOfQuestionsInputProps {
   questionNumber: number;
   setQuestionNumber: (nextValue: number) => void;
 }
 
-const NumberOfQuestions: React.FC<NumberOfQuestionsProps> = ({
+const NumberOfQuestionsInput: React.FC<NNumberOfQuestionsInputProps> = ({
   questionNumber,
   setQuestionNumber,
 }) => {
@@ -67,4 +67,4 @@ const NumberOfQuestions: React.FC<NumberOfQuestionsProps> = ({
   );
 };
 
-export default NumberOfQuestions;
+export default NumberOfQuestionsInput;

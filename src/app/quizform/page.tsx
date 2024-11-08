@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 import { useAppDispatch } from "@/lib/hooks";
 import { replaceQuiz } from "@/lib/features/quizSlice";
-import { Flex, Box, Heading, IconButton } from "@chakra-ui/react";
-import { MdAccountBox } from "react-icons/md";
+import { Flex, Box, Heading, Icon, IconButton } from "@chakra-ui/react";
+import { Tooltip } from "@/components/ui/tooltip";
+import { LuUserCircle } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import QuizFormContent from "./components/quizFormContent";
@@ -14,7 +15,7 @@ const QuizForm = () => {
   const [difficulty, setDifficulty] = useState("any");
   const [questionTypes, setQuestionTypes] = useState([true, false, false]);
   const questionType = ["any", "multiple", "boolean"].filter(
-    (el, i) => questionTypes[i],
+    (el, i) => questionTypes[i]
   )[0];
   const router = useRouter();
 
@@ -55,7 +56,7 @@ const QuizForm = () => {
             difficulty,
             questionType,
             data: fetchQuizResult.data.results,
-          }),
+          })
         );
         router.push("/quiz");
       }
@@ -67,52 +68,17 @@ const QuizForm = () => {
   return (
     <Flex w="full" align="center" justifyContent="center" h="100vh">
       <Box p={8} maxW="full" borderWidth={1} borderRadius={8} boxShadow="md">
-        <Flex w="full" align="center" justifyContent="center">
-          <Box textAlign="center" w="80%" pl="18%">
-            <Heading size="3xl">Quiz Option</Heading>
-          </Box>
-          {/* testing */}
-          <Box textAlign="right" pl="10%">
-            {/* <Popover>
-              <PopoverTrigger>
-                <IconButton
-                  aria-label='Recent Result'
-                  icon={<MdAccountBox size={30}/>}
-                  color='teal.400'
-                  variant="ghost"
-                />
-              </PopoverTrigger>
-              <PopoverContent textAlign="left">
-                <PopoverArrow />
-                <PopoverCloseButton />
-                <PopoverHeader textAlign='center' fontSize={24}><b>Recent Result</b></PopoverHeader>
-                <PopoverBody>
-                <TableContainer>
-                    <Table variant='simple' fontSize={18}>
-                      <Tbody height='10px'>
-                        <Tr >
-                          <Td pl='5px' pr='5px' textAlign='left' color='gray.600'><b>Question Number</b></Td>
-                          <Td pl='5px' pr='5px' textAlign='left' color='purple.500' width='10px'><b>{recentQuestionNumber}</b></Td>
-                        </Tr>
-                        <Tr>
-                          <Td pl='5px' pr='5px' textAlign='left' color='gray.600'><b>Category</b></Td>
-                          <Td pl='5px' pr='5px' textAlign='left' color='green.500'><b>{recentCategory.toUpperCase()}</b></Td>
-                        </Tr>
-                        <Tr>
-                          <Td pl='5px' pr='5px' textAlign='left' color='gray.600'><b>Difficulty</b></Td>
-                          <Td pl='5px' pr='5px' textAlign='left' color='red.500'><b>{recentDifficulty.toUpperCase()}</b></Td>
-                        </Tr>
-                        <Tr>
-                          <Td pl='5px' pr='5px' textAlign='left' color='gray.600'><b>Question Type</b></Td>
-                          <Td pl='5px' pr='5px' textAlign='left' color='blue.500'><b>{recentQuestionType.toUpperCase()}</b></Td>
-                        </Tr>
-                      </Tbody>
-                    </Table>
-                  </TableContainer>
-                </PopoverBody>
-              </PopoverContent>
-            </Popover> */}
-          </Box>
+        <Flex w="full" align="center" justifyContent="space-between">
+          <Box w="2.5rem"></Box>
+          <Heading size="3xl">Quiz Option</Heading>
+          <IconButton
+            aria-label="Profile Button"
+            variant="ghost"
+            rounded="full"
+            onClick={() => router.push("/profile")}
+          >
+            <LuUserCircle />
+          </IconButton>
         </Flex>
 
         {/* Quiz Form Content */}

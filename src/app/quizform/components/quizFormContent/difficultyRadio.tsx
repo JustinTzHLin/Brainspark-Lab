@@ -3,12 +3,12 @@ import { Field } from "@/components/ui/field";
 import { Radio, RadioGroup } from "@/components/ui/radio";
 import { PiGaugeBold } from "react-icons/pi";
 
-interface DifficultyProps {
+interface DifficultyRadioProps {
   difficulty: string;
   setDifficulty: (nextValue: string) => void;
 }
 
-const Difficulty: React.FC<DifficultyProps> = ({
+const DifficultyRadio: React.FC<DifficultyRadioProps> = ({
   difficulty,
   setDifficulty,
 }) => {
@@ -53,4 +53,4 @@ const Difficulty: React.FC<DifficultyProps> = ({
   );
 };
 
-export default Difficulty;
+export default DifficultyRadio;

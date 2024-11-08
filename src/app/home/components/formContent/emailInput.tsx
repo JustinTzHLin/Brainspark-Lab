@@ -1,22 +1,23 @@
-import React from "react";
+import { useRef } from "react";
 import { Input, IconButton } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { InputGroup } from "@/components/ui/input-group";
 import { LuMail, LuX } from "react-icons/lu";
 
-interface EmailProps {
+interface EmailInputProps {
   setEmail: (nextValue: string) => void;
   isEmailEmpty: boolean;
   setEmailEmpty: (nextValue: boolean) => void;
   email: string;
 }
 
-const Email: React.FC<EmailProps> = ({
+const EmailInput: React.FC<EmailInputProps> = ({
   setEmail,
   isEmailEmpty,
   setEmailEmpty,
   email,
 }) => {
+  const emailInputRef = useRef<HTMLInputElement>(null);
   return (
     <Field
       mt={6}
@@ -31,7 +32,10 @@ const Email: React.FC<EmailProps> = ({
         endElement={
           <IconButton
             variant="plain"
-            onClick={() => setEmail("")}
+            onClick={() => {
+              setEmail("");
+              emailInputRef.current?.focus();
+            }}
             mr={-2}
             size="xs"
           >
@@ -42,6 +46,7 @@ const Email: React.FC<EmailProps> = ({
         <Input
           type="email"
           placeholder="test@test.com"
+          ref={emailInputRef}
           autoFocus
           value={email}
           onChange={(e) => setEmail(e.currentTarget.value)}
@@ -52,4 +57,4 @@ const Email: React.FC<EmailProps> = ({
   );
 };
 
-export default Email;
+export default EmailInput;

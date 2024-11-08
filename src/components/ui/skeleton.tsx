@@ -25,7 +25,6 @@ export interface SkeletonTextProps extends ChakraSkeletonProps {
 export const SkeletonText = forwardRef<HTMLDivElement, SkeletonTextProps>(
   function SkeletonText(props, ref) {
     const { noOfLines = 3, gap, children, ...rest } = props;
-    console.log(rest);
     return (
       <Stack gap={gap} width="full" ref={ref}>
         {Array.from({ length: noOfLines }).map((_, index) => (
@@ -40,7 +39,7 @@ export const SkeletonText = forwardRef<HTMLDivElement, SkeletonTextProps>(
         ))}
       </Stack>
     );
-  },
+  }
 );
 
 export const Skeleton = ChakraSkeleton;

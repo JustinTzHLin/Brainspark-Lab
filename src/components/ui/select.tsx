@@ -28,7 +28,7 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
         </ChakraSelect.IndicatorGroup>
       </ChakraSelect.Control>
     );
-  },
+  }
 );
 
 const SelectClearTrigger = forwardRef<
@@ -63,7 +63,7 @@ export const SelectContent = forwardRef<HTMLDivElement, SelectContentProps>(
         </ChakraSelect.Positioner>
       </Portal>
     );
-  },
+  }
 );
 
 export const SelectItem = forwardRef<HTMLDivElement, ChakraSelect.ItemProps>(
@@ -75,7 +75,7 @@ export const SelectItem = forwardRef<HTMLDivElement, ChakraSelect.ItemProps>(
         <ChakraSelect.ItemIndicator />
       </ChakraSelect.Item>
     );
-  },
+  }
 );
 
 interface SelectValueTextProps
@@ -111,10 +111,19 @@ export const SelectRoot = forwardRef<HTMLDivElement, ChakraSelect.RootProps>(
         {...props}
         ref={ref}
         positioning={{ sameWidth: true, ...props.positioning }}
-      />
+      >
+        {props.asChild ? (
+          props.children
+        ) : (
+          <>
+            <ChakraSelect.HiddenSelect />
+            {props.children}
+          </>
+        )}
+      </ChakraSelect.Root>
     );
-  },
-);
+  }
+) as ChakraSelect.RootComponent;
 
 interface SelectItemGroupProps extends ChakraSelect.ItemGroupProps {
   label: React.ReactNode;
@@ -129,7 +138,7 @@ export const SelectItemGroup = forwardRef<HTMLDivElement, SelectItemGroupProps>(
         {children}
       </ChakraSelect.ItemGroup>
     );
-  },
+  }
 );
 
 export const SelectLabel = ChakraSelect.Label;

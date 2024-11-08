@@ -44,4 +44,9 @@ export const {
   replaceIsLoadingModalOpen,
 } = loginSlice.actions;
 
+export type replaceActionType = typeof replaceAction;
+export type replaceStatusType = typeof replaceStatus;
+export type replaceLoggedInType = typeof replaceLoggedIn;
+export type replaceIsLoadingModalOpenType = typeof replaceIsLoadingModalOpen;
+
 export default loginSlice.reducer;

@@ -7,20 +7,19 @@ import {
   DialogHeader,
   DialogRoot,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch } from "@/lib/hooks";
 import { replaceAction } from "@/lib/features/loginSlice";
 
-interface SignupConfirmAlertProps {
+interface SignupConfirmModalProps {
   SignupConfirmIsOpen: boolean;
   setSignupConfirmIsOpen: (arg0: boolean) => void;
   cancelSignupConfirmRef: any;
   email: string;
 }
 
-const SignupConfirmAlert: React.FC<SignupConfirmAlertProps> = ({
+const SignupConfirmModal: React.FC<SignupConfirmModalProps> = ({
   SignupConfirmIsOpen,
   setSignupConfirmIsOpen,
   cancelSignupConfirmRef,
@@ -61,4 +60,4 @@ const SignupConfirmAlert: React.FC<SignupConfirmAlertProps> = ({
   );
 };
 
-export default SignupConfirmAlert;
+export default SignupConfirmModal;

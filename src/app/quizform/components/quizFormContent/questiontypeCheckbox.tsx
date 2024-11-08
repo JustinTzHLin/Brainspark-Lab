@@ -3,12 +3,12 @@ import { Field } from "@/components/ui/field";
 import { Checkbox } from "@/components/ui/checkbox";
 import { BsUiRadios } from "react-icons/bs";
 
-interface QuestionTypeProps {
+interface QuestionTypeCheckboxProps {
   questionTypes: boolean[];
   setQuestionTypes: (nextValue: boolean[]) => void;
 }
 
-const QuestionType: React.FC<QuestionTypeProps> = ({
+const QuestionTypeCheckbox: React.FC<QuestionTypeCheckboxProps> = ({
   questionTypes,
   setQuestionTypes,
 }) => {
@@ -62,4 +62,4 @@ const QuestionType: React.FC<QuestionTypeProps> = ({
   );
 };
 
-export default QuestionType;
+export default QuestionTypeCheckbox;

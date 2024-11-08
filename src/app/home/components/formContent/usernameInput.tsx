@@ -4,13 +4,13 @@ import { Field } from "@/components/ui/field";
 import { InputGroup } from "@/components/ui/input-group";
 import { FaUser } from "react-icons/fa";
 
-interface UsernameProps {
+interface UsernameInputProps {
   setUsername: (nextValue: string) => void;
   isUsernameEmpty: boolean;
   setUsernameEmpty: (nextValue: boolean) => void;
 }
 
-const Username: React.FC<UsernameProps> = ({
+const UsernameInput: React.FC<UsernameInputProps> = ({
   setUsername,
   isUsernameEmpty,
   setUsernameEmpty,
@@ -35,4 +35,4 @@ const Username: React.FC<UsernameProps> = ({
   );
 };
 
-export default Username;
+export default UsernameInput;
