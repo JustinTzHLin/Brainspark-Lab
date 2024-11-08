@@ -1,4 +1,4 @@
-import { Flex, Box, Stack, Icon, Center } from "@chakra-ui/react";
+import { Flex, Stack, Icon, Center } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { Radio, RadioGroup } from "@/components/ui/radio";
 import { PiGaugeBold } from "react-icons/pi";

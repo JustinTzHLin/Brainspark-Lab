@@ -1,14 +1,9 @@
 import React from "react";
 import {
   DialogBackdrop,
-  DialogBody,
-  DialogCloseTrigger,
   DialogContent,
-  DialogFooter,
-  DialogHeader,
   DialogRoot,
-  DialogTitle,
-  DialogTrigger,
+  DialogBody,
 } from "@/components/ui/dialog";
 import {
   ProgressCircleRing,
@@ -19,7 +14,7 @@ import { replaceIsLoadingModalOpen } from "@/lib/features/loginSlice";
 
 const LoadingModal = () => {
   const isLoadingModalOpen = useAppSelector(
-    (state) => state.login.userAccess.isLoadingModalOpen,
+    (state) => state.login.userAccess.isLoadingModalOpen
   );
   const dispatch = useAppDispatch();
 
@@ -34,11 +29,13 @@ const LoadingModal = () => {
         bg="whiteAlpha.600"
         backdropFilter="blur(10px) hue-rotate(90deg)"
       />
-      <DialogContent w="0" h="0" right="7rem" top="-7rem" borderRadius="7rem">
-        {/* <CircularProgress isIndeterminate color='teal.400' size='14rem' thickness='0.5rem'/> */}
-        <ProgressCircleRoot value={null} size="sm" color={"teal.400"}>
-          <ProgressCircleRing cap="round" css={{ "--thickness": "0.5rem" }} />
-        </ProgressCircleRoot>
+      {/* <CircularProgress isIndeterminate color='teal.400' size='14rem' thickness='0.5rem'/> */}
+      <DialogContent w={0} h={0} right="7rem" top="-7rem" borderRadius="7rem">
+        {/* <DialogBody>
+          <ProgressCircleRoot value={null} size="xl">
+            <ProgressCircleRing cap="round" />
+          </ProgressCircleRoot>
+        </DialogBody> */}
       </DialogContent>
     </DialogRoot>
   );

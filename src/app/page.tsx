@@ -1,12 +1,9 @@
 "use client";
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense } from "react";
 import { Flex, Box, Heading } from "@chakra-ui/react";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { replaceIsLoadingModalOpen } from "@/lib/features/loginSlice";
-import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/lib/hooks";
 import FormContent from "./home/components/formContent";
 import VerifyLoggedInModal from "../components/verifyLoggedInModal";
-import axios from "axios";
 
 const LogInForm = () => {
   const currentAction = useAppSelector(

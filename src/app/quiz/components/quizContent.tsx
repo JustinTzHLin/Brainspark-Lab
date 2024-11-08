@@ -1,4 +1,3 @@
-"use client";
 import { useAppSelector } from "@/lib/hooks";
 import { Box } from "@chakra-ui/react";
 import { ProgressBar, ProgressRoot } from "@/components/ui/progress";

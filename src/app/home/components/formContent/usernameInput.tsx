@@ -1,4 +1,3 @@
-import React from "react";
 import { Input } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { InputGroup } from "@/components/ui/input-group";

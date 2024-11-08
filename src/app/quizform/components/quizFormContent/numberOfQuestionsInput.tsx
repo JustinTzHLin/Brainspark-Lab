@@ -1,10 +1,4 @@
-import {
-  Flex,
-  Icon,
-  Center,
-  // NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper,
-  // SliderFilledTrack, SliderTrack, Slider, SliderThumb
-} from "@chakra-ui/react";
+import { Flex, Icon, Center } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import {
   NumberInputField,

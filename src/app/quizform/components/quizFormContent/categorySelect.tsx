@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Flex, Icon, Center, createListCollection } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import {

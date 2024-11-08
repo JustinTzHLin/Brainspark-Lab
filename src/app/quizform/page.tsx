@@ -2,8 +2,7 @@
 import React, { useState } from "react";
 import { useAppDispatch } from "@/lib/hooks";
 import { replaceQuiz } from "@/lib/features/quizSlice";
-import { Flex, Box, Heading, Icon, IconButton } from "@chakra-ui/react";
-import { Tooltip } from "@/components/ui/tooltip";
+import { Flex, Box, Heading, IconButton } from "@chakra-ui/react";
 import { LuUserCircle } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -18,12 +17,6 @@ const QuizForm = () => {
     (el, i) => questionTypes[i]
   )[0];
   const router = useRouter();
-
-  const [recentQuestionNumber, setRecentQuestionNumber] = useState(10);
-  const [recentCategory, setRecentCategory] = useState("any");
-  const [recentDifficulty, setRecentDifficulty] = useState("any");
-  const [recentQuestionType, setRecentQuestionType] = useState("any");
-
   const dispatch = useAppDispatch();
 
   // Handle click start quiz
