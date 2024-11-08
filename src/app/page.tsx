@@ -1,21 +1,28 @@
-'use client';
-import React, { Suspense } from 'react';
-import { Flex, Box, Heading } from '@chakra-ui/react';
-import { useAppSelector } from '@/lib/hooks';
-import FormContent from './formContent';
+"use client";
+import React, { Suspense } from "react";
+import { Flex, Box, Heading } from "@chakra-ui/react";
+import { useAppSelector } from "@/lib/hooks";
+import FormContent from "./home/components/formContent";
+import VerifyLoggedInModal from "../components/verifyLoggedInModal";
 
 const LogInForm = () => {
-  const currentAction = useAppSelector(state => state.login.loginObject.currentAction);
+  const currentAction = useAppSelector(
+    (state) => state.login.userAccess.currentAction
+  );
 
   return (
-    <Flex width="100%" align="center" justifyContent="center" p={8} height="100vh">
-      <Box p={8} maxWidth="700px" borderWidth={1} borderRadius={8} boxShadow="lg"> 
+    <Flex w="full" align="center" justifyContent="center" height="100vh">
+      <VerifyLoggedInModal />
+      <Box p={8} maxW="full" borderWidth={1} borderRadius={8} boxShadow="md">
         <Box textAlign="center">
-          <Heading color='teal.300'>{currentAction === 'signup' ? 'Sign Up' : 'Login'}</Heading>
+          <Heading size="3xl">
+            {currentAction === "signup" ? "Sign Up" : "Login"}
+          </Heading>{" "}
+          {/* color='teal.400' */}
         </Box>
 
         {/* Login Form Content */}
-        <Suspense fallback={<Box width="30rem" height="216px"></Box>}>
+        <Suspense fallback={<Box w="26rem" height="202px" maxW="full"></Box>}>
           <FormContent />
         </Suspense>
       </Box>

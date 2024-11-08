@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ChakraProviders } from './providers/chakraProviders';
-import StoreProvider from './providers/StoreProvider';
+import { ChakraProviders } from "./providers/chakraProviders";
+import StoreProvider from "./providers/StoreProvider";
 // import "./globals.css";
 
 // const inter = Inter({ subsets: ["latin"] });
@@ -17,14 +17,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-      </head>
+    <html lang="en" suppressHydrationWarning>
+      <head></head>
       <body>
         <StoreProvider>
-          <ChakraProviders>
-            {children}
-          </ChakraProviders>
+          <ChakraProviders>{children}</ChakraProviders>
         </StoreProvider>
       </body>
     </html>
