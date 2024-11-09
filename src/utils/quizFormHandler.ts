@@ -6,11 +6,12 @@ import { replaceStatusType } from "../lib/features/loginSlice";
 import { replaceActionType } from "../lib/features/loginSlice";
 import { toaster } from "@/components/ui/toaster";
 
-const verifyLoggedIn = async (
+export const verifyLoggedIn = async (
   BACKEND_URL: string,
   router: AppRouterInstance,
   dispatch: AppDispatch,
-  replaceIsLoadingModalOpen: replaceIsLoadingModalOpenType
+  replaceIsLoadingModalOpen: replaceIsLoadingModalOpenType,
+  redirectURL: string
 ) => {
   try {
     const loggedIn = await axios.post(
@@ -19,11 +20,16 @@ const verifyLoggedIn = async (
       { withCredentials: true }
     );
     if (loggedIn?.data?.result) {
-      setTimeout(() => dispatch(replaceIsLoadingModalOpen(false)), 1000);
-      router.push("/quizform");
-    }
+      console.log("User Information: ", loggedIn.data.userInformation);
+      console.log(loggedIn.data.userInformation.last_visited);
+      const test = new Date(loggedIn.data.userInformation.last_visited);
+      console.log(test);
+      router.push(redirectURL);
+    } else router.push("/");
+    setTimeout(() => dispatch(replaceIsLoadingModalOpen(false)), 1000);
   } catch (err: any) {
     console.log(err);
+    router.push("/");
     setTimeout(() => dispatch(replaceIsLoadingModalOpen(false)), 1000);
   }
 };
@@ -42,7 +48,6 @@ const confirmToken = async (
       { token },
       { withCredentials: true }
     );
-    console.log(tokenConfirmResult);
     setEmail(tokenConfirmResult.data.useremail);
     dispatch(replaceStatus("initial_registration"));
     dispatch(replaceAction("signup"));
@@ -75,7 +80,8 @@ export const initialStatusConfirm = (
   dispatch: AppDispatch,
   replaceStatus: replaceStatusType,
   replaceAction: replaceActionType,
-  replaceIsLoadingModalOpen: replaceIsLoadingModalOpenType
+  replaceIsLoadingModalOpen: replaceIsLoadingModalOpenType,
+  redirectURL: string
 ) => {
   if (token)
     confirmToken(
@@ -86,5 +92,12 @@ export const initialStatusConfirm = (
       replaceStatus,
       replaceAction
     );
-  else verifyLoggedIn(BACKEND_URL, router, dispatch, replaceIsLoadingModalOpen);
+  else
+    verifyLoggedIn(
+      BACKEND_URL,
+      router,
+      dispatch,
+      replaceIsLoadingModalOpen,
+      redirectURL
+    );
 };

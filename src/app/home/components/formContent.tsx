@@ -46,7 +46,8 @@ const FormContent = () => {
       dispatch,
       replaceStatus,
       replaceAction,
-      replaceIsLoadingModalOpen
+      replaceIsLoadingModalOpen,
+      "/quizform"
     );
   }, [BACKEND_URL, dispatch, router, searchParamas]);
 
@@ -276,7 +277,6 @@ const FormContent = () => {
               ? "Already have an account? "
               : "Don’t have an account? "}
             <Link
-              variant="underline"
               onClick={() => {
                 dispatch(
                   replaceAction(currentAction === "signup" ? "login" : "signup")

@@ -7,6 +7,11 @@ export interface loginState {
     loggedIn: boolean;
     isLoadingModalOpen: boolean;
   };
+  // userInformation: {
+  //   email: string;
+  //   username: string;
+  //   password: string;
+  // };
 }
 
 const initialState: loginState = {
