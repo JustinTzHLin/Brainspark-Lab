@@ -20,12 +20,11 @@ export const verifyLoggedIn = async (
       { withCredentials: true }
     );
     if (loggedIn?.data?.result) {
-      console.log("User Information: ", loggedIn.data.userInformation);
-      console.log(loggedIn.data.userInformation.last_visited);
-      const test = new Date(loggedIn.data.userInformation.last_visited);
-      console.log(test);
       router.push(redirectURL);
-    } else router.push("/");
+      setTimeout(() => dispatch(replaceIsLoadingModalOpen(false)), 1000);
+      return loggedIn.data.userInformation;
+    }
+    router.push("/");
     setTimeout(() => dispatch(replaceIsLoadingModalOpen(false)), 1000);
   } catch (err: any) {
     console.log(err);

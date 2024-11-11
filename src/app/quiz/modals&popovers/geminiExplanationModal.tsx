@@ -87,9 +87,7 @@ const GeminiExplanationModal: React.FC<GeminiExplanationModalProps> = ({
       <DialogContent>
         <DialogCloseTrigger />
         <DialogHeader>
-          <DialogTitle>
-            <Heading size="2xl">Explanation from Gemini</Heading>
-          </DialogTitle>
+          <Heading size="2xl">Explanation from Gemini</Heading>
         </DialogHeader>
         <DialogBody>
           <Stack separator={<StackSeparator />} gap={3}>

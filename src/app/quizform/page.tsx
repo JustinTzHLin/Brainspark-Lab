@@ -69,6 +69,7 @@ const QuizForm = () => {
             variant="ghost"
             rounded="full"
             onClick={() => router.push("/profile")}
+            _active={{ transform: "scale(0.9)" }}
           >
             <LuUserCircle />
           </IconButton>
