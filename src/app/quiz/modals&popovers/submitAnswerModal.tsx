@@ -1,4 +1,5 @@
 import {
+  DialogActionTrigger,
   DialogBackdrop,
   DialogBody,
   DialogCloseTrigger,
@@ -13,14 +14,12 @@ import { Button } from "@/components/ui/button";
 interface SubmitAnswerModalProps {
   submitAnswerIsOpen: boolean;
   setSubmitAnswerIsOpen: (arg0: boolean) => void;
-  cancelSubmitAnswerRef: any;
   checkAnswers: () => void;
 }
 
 const SubmitAnswerModal: React.FC<SubmitAnswerModalProps> = ({
   submitAnswerIsOpen,
   setSubmitAnswerIsOpen,
-  cancelSubmitAnswerRef,
   checkAnswers,
 }) => {
   return (
@@ -43,13 +42,9 @@ const SubmitAnswerModal: React.FC<SubmitAnswerModalProps> = ({
           turning back!
         </DialogBody>
         <DialogFooter>
-          <Button
-            ref={cancelSubmitAnswerRef}
-            onClick={() => setSubmitAnswerIsOpen(false)}
-            variant="subtle"
-          >
-            Nah
-          </Button>
+          <DialogActionTrigger>
+            <Button variant="subtle">Nah</Button>
+          </DialogActionTrigger>
           <Button onClick={() => checkAnswers()} ml={3}>
             Sure thing!
           </Button>

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Box, Text, Link, Center } from "@chakra-ui/react";
 import { Button } from "@/components/ui/button";
@@ -33,7 +33,6 @@ const FormContent = () => {
   const searchParamas = useSearchParams();
 
   const [signupConfirmIsOpen, setSignupConfirmIsOpen] = useState(false);
-  const cancelSignupConfirmRef = useRef<null | HTMLButtonElement>(null);
 
   useEffect(() => {
     const token = searchParamas.get("token");
@@ -293,7 +292,6 @@ const FormContent = () => {
         <SignupConfirmModal
           SignupConfirmIsOpen={signupConfirmIsOpen}
           setSignupConfirmIsOpen={setSignupConfirmIsOpen}
-          cancelSignupConfirmRef={cancelSignupConfirmRef}
           email={email}
         />
       </form>

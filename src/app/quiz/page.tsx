@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import { useState } from "react";
 import { useAppSelector } from "@/lib/hooks";
 import { Flex, Box } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
@@ -58,7 +58,6 @@ const Quiz = () => {
   }>({ correctAnswer: "", incorrectAnswers: ["", "", "", ""] });
   const [geminiContentSuccess, setGeminiContentSuccess] = useState(false);
   const [submitAnswerIsOpen, setSubmitAnswerIsOpen] = useState(false);
-  const cancelSubmitAnswerRef = useRef<null | HTMLButtonElement>(null);
   const [checkAnswer, setCheckAnswer] = useState(false);
   const [geminiModalIsOpen, setGeminiModalIsOpen] = useState(false);
 
@@ -209,7 +208,6 @@ const Quiz = () => {
       <SubmitAnswerModal
         submitAnswerIsOpen={submitAnswerIsOpen}
         setSubmitAnswerIsOpen={setSubmitAnswerIsOpen}
-        cancelSubmitAnswerRef={cancelSubmitAnswerRef}
         checkAnswers={checkAnswers}
       />
 
