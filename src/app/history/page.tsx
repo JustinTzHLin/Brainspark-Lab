@@ -10,6 +10,7 @@ import { useAppDispatch } from "@/lib/hooks";
 import { replaceIsLoadingModalOpen } from "@/lib/features/loginSlice";
 import axios from "axios";
 import TriviaRecords from "./components/triviaRecords";
+import TriviaCharts from "./components/triviaCharts";
 
 const History = () => {
   const BACKEND_URL =
@@ -44,7 +45,10 @@ const History = () => {
         replaceIsLoadingModalOpen,
         "/history"
       );
-      if (userInformation) setUserInformation(userInformation);
+      if (userInformation) {
+        setUserInformation(userInformation);
+        fetchUserHistory();
+      }
     };
     const fetchUserHistory = async () => {
       try {
@@ -65,7 +69,6 @@ const History = () => {
       }
     };
     fetchUserInformation();
-    fetchUserHistory();
   }, [BACKEND_URL, dispatch, router]);
 
   return (
@@ -91,7 +94,9 @@ const History = () => {
             <Tabs.Content value="records" maxH="full">
               <TriviaRecords userHistory={userHistory} />
             </Tabs.Content>
-            <Tabs.Content value="charts">Manage your projects</Tabs.Content>
+            <Tabs.Content value="charts">
+              <TriviaCharts userHistory={userHistory} />
+            </Tabs.Content>
           </Tabs.Root>
         </Card.Body>
       </Card.Root>
