@@ -13,7 +13,7 @@ const DifficultyRadio: React.FC<DifficultyRadioProps> = ({
   setDifficulty,
 }) => {
   return (
-    <Field mt={6} label="Difficulty">
+    <Field mt={8} label="Difficulty">
       <Flex w="full" h={10}>
         <Center
           width="2.5rem"

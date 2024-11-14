@@ -33,7 +33,7 @@ const QuizContent: React.FC<QuizContentProps> = ({
   const quizObject = useAppSelector((state) => state.quiz.quizObject);
   const { questionNumber } = quizObject;
   return (
-    <Box w="26rem" maxW="full">
+    <Box w="30rem" maxW="full">
       <ProgressRoot
         my={8}
         value={

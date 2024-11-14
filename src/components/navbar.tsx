@@ -1,14 +1,4 @@
-import {
-  Box,
-  Flex,
-  HStack,
-  Link,
-  Button,
-  Center,
-  Text,
-  IconButton,
-  Image,
-} from "@chakra-ui/react";
+import { Flex, Center, Text, IconButton, Image } from "@chakra-ui/react";
 import {
   MenuContent,
   MenuItem,
@@ -22,9 +12,19 @@ const Navbar = () => {
   const router = useRouter();
   return (
     <Center p={3} pl={6} pr={6} borderBottomWidth={1} boxShadow="sm">
-      <Flex align="center" justify="space-between" w="full" maxW={1000}>
+      <Flex
+        align="center"
+        justify="space-between"
+        w={{ base: 500, md: 650, lg: 850, xl: 1100 }}
+      >
         {/* Brand Name */}
-        <Flex fontWeight="bold" align="center" gap={1}>
+        <Flex
+          fontWeight="bold"
+          align="center"
+          gap={1}
+          onClick={() => router.push("/quizform")}
+          _hover={{ cursor: "pointer" }}
+        >
           <Image src="/trivioasis.jpg" alt="Logo" h={5} />
           <Text fontSize="xl" color="teal.500">
             Trvioasis
@@ -35,7 +35,7 @@ const Navbar = () => {
         <Flex
           justify="space-between"
           display={{ base: "none", sm: "flex" }}
-          w={{ sm: "45%", md: "30%", lg: "25%" }}
+          w={{ sm: "45%", md: "40%", lg: "30%" }}
         >
           <Text
             color="gray.600"

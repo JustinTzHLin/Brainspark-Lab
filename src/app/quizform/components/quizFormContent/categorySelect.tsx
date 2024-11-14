@@ -47,7 +47,7 @@ const CategorySelect: React.FC<CategorySelectProps> = ({ setCategory }) => {
   });
 
   return (
-    <Field mt={6} label="Category">
+    <Field mt={8} label="Category">
       <Flex w="full">
         <Center
           width="2.5rem"

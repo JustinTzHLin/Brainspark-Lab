@@ -26,7 +26,7 @@ const QuizFormContent: React.FC<QuizFormContentProps> = ({
   handleStartQuiz,
 }) => {
   return (
-    <Box my={6} w="26rem" maxW="full">
+    <Box my={8} w="26rem" maxW="full">
       {/* Number of Questions */}
       <NumberOfQuestionsInput
         questionNumber={questionNumber}
@@ -46,7 +46,7 @@ const QuizFormContent: React.FC<QuizFormContentProps> = ({
       />
 
       {/* Start Quiz Button */}
-      <Button w="full" mt={8} onClick={handleStartQuiz}>
+      <Button w="full" mt={10} onClick={handleStartQuiz}>
         <Text fontSize="md">
           <b>S t a r t&nbsp;&nbsp;&nbsp;&nbsp;Q u i z !</b>
         </Text>

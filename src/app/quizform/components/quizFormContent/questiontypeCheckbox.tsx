@@ -14,7 +14,7 @@ const QuestionTypeCheckbox: React.FC<QuestionTypeCheckboxProps> = ({
 }) => {
   return (
     <>
-      <Field mt={6} label="Question Type"></Field>
+      <Field mt={8} label="Question Type"></Field>
       <Flex w="full" h={10} mt={1.5}>
         <Center
           width="2.5rem"

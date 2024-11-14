@@ -20,6 +20,7 @@ import {
   MenuTrigger,
 } from "@/components/ui/menu";
 import { Toaster, toaster } from "@/components/ui/toaster";
+import Navbar from "@/components/navbar";
 import VerifyLoggedInModal from "@/components/verifyLoggedInModal";
 import UpdatePasswordModal from "./modals/updatePasswordModal";
 import { verifyLoggedIn } from "@/utils/quizFormHandler";
@@ -98,87 +99,95 @@ const Profile = () => {
   };
 
   return (
-    <Flex w="full" align="center" justifyContent="center" height="100vh">
-      <Card.Root variant="elevated">
-        <Card.Header>
-          <Flex mb={6} w="full" justifyContent="space-between">
-            <Box w={10}></Box>
-            <Avatar
-              name={userInformation.username}
-              boxSize={180}
-              fontSize={90}
-            />
-            <MenuRoot positioning={{ placement: "bottom-end" }}>
-              <MenuTrigger asChild>
-                <IconButton variant="ghost" aria-label="menu">
-                  <LuMenu />
-                </IconButton>
-              </MenuTrigger>
-              <MenuContent>
-                <MenuItem
-                  value="past-trivia"
-                  _hover={{ cursor: "pointer" }}
-                  onClick={() => router.push("/history")}
-                >
-                  <LuHistory size={16} />
-                  History
-                </MenuItem>
-                <MenuItem
-                  value="play-trivia"
-                  _hover={{ cursor: "pointer" }}
-                  onClick={() => router.push("/quizform")}
-                >
-                  <LuTrophy size={16} />
-                  Play Trivia
-                </MenuItem>
-              </MenuContent>
-            </MenuRoot>
-          </Flex>
-          <Heading size="4xl" textAlign="center">
-            {userInformation.username}
-          </Heading>
-        </Card.Header>
-        <Card.Body>
-          <Center>
-            <Text textStyle="xl" textAlign="left">
-              {userInformation.email}
-            </Text>
-          </Center>
-          <Center mt={4}>
-            <Card.Description fontSize="md">
-              You joined Triviaosis on:&nbsp;
-              <b>{formatDate(userInformation.created_at)}</b>
-            </Card.Description>
-          </Center>
-          <Center mt={2}>
-            <Card.Description fontSize="md">
-              Your last visit was:&nbsp;
-              <b>{formatDate(userInformation.last_visited)}</b>
-            </Card.Description>
-          </Center>
-        </Card.Body>
-        <Card.Footer>
-          <Flex w="100%" justifyContent="center" gap={2}>
-            <Button
-              variant="subtle"
-              onClick={() => setUpdatePasswordIsOpen(true)}
-            >
-              Change Password
-            </Button>
-            <Button variant="subtle" onClick={() => logOut()}>
-              <LuLogOut />
-              Log Out
-            </Button>
-          </Flex>
-        </Card.Footer>
-      </Card.Root>
-      <VerifyLoggedInModal />
-      <UpdatePasswordModal
-        UpdatePasswordIsOpen={UpdatePasswordIsOpen}
-        setUpdatePasswordIsOpen={setUpdatePasswordIsOpen}
-      />
-      <Toaster />
-    </Flex>
+    <Box>
+      <Navbar />
+      <Flex
+        w="full"
+        align="center"
+        justifyContent="center"
+        h="calc(100vh - 63px)"
+      >
+        <Card.Root variant="elevated" p={4}>
+          <Card.Header>
+            <Flex mb={6} w="full" justifyContent="space-between">
+              <Box w={10}></Box>
+              <Avatar
+                name={userInformation.username}
+                boxSize={180}
+                fontSize={90}
+              />
+              <MenuRoot positioning={{ placement: "bottom-end" }}>
+                <MenuTrigger asChild>
+                  <IconButton variant="ghost" aria-label="menu">
+                    <LuMenu />
+                  </IconButton>
+                </MenuTrigger>
+                <MenuContent>
+                  <MenuItem
+                    value="past-trivia"
+                    _hover={{ cursor: "pointer" }}
+                    onClick={() => router.push("/history")}
+                  >
+                    <LuHistory size={16} />
+                    History
+                  </MenuItem>
+                  <MenuItem
+                    value="play-trivia"
+                    _hover={{ cursor: "pointer" }}
+                    onClick={() => router.push("/quizform")}
+                  >
+                    <LuTrophy size={16} />
+                    Play Trivia
+                  </MenuItem>
+                </MenuContent>
+              </MenuRoot>
+            </Flex>
+            <Heading size="4xl" textAlign="center">
+              {userInformation.username}
+            </Heading>
+          </Card.Header>
+          <Card.Body>
+            <Center>
+              <Text textStyle="xl" textAlign="left">
+                {userInformation.email}
+              </Text>
+            </Center>
+            <Center mt={4}>
+              <Card.Description fontSize="md">
+                You joined Triviaosis on:&nbsp;
+                <b>{formatDate(userInformation.created_at) + ""}</b>
+              </Card.Description>
+            </Center>
+            <Center mt={2}>
+              <Card.Description fontSize="md">
+                Your last visit was:&nbsp;
+                <b>{formatDate(userInformation.last_visited)}</b>
+              </Card.Description>
+            </Center>
+          </Card.Body>
+          <Card.Footer>
+            <Flex w="100%" justifyContent="center" gap={2}>
+              <Button
+                variant="subtle"
+                onClick={() => setUpdatePasswordIsOpen(true)}
+              >
+                Change Password
+              </Button>
+              <Button variant="subtle" onClick={() => logOut()}>
+                <LuLogOut />
+                Log Out
+              </Button>
+            </Flex>
+          </Card.Footer>
+        </Card.Root>
+        <VerifyLoggedInModal />
+        <UpdatePasswordModal
+          UpdatePasswordIsOpen={UpdatePasswordIsOpen}
+          setUpdatePasswordIsOpen={setUpdatePasswordIsOpen}
+        />
+        <Toaster />
+      </Flex>
+    </Box>
   );
 };
 
