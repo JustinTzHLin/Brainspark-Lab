@@ -46,7 +46,7 @@ const SignupConfirmModal: React.FC<SignupConfirmModalProps> = ({
           email to activate your account and start enjoying Trivioasis.
         </DialogBody>
         <DialogFooter>
-          <DialogActionTrigger>
+          <DialogActionTrigger asChild>
             <Button variant="subtle">Ok</Button>
           </DialogActionTrigger>
         </DialogFooter>

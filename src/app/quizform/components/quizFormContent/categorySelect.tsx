@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Flex, Icon, Center, createListCollection } from "@chakra-ui/react";
+import { Flex, Center, createListCollection } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import {
   SelectContent,
@@ -58,9 +58,7 @@ const CategorySelect: React.FC<CategorySelectProps> = ({ setCategory }) => {
           borderBottomRightRadius={0}
           borderRightWidth={0}
         >
-          <Icon boxSize={5}>
-            <BiSolidCategoryAlt />
-          </Icon>
+          <BiSolidCategoryAlt size={20} />
         </Center>
         <SelectRoot
           w="calc(100% - 2.5rem)"

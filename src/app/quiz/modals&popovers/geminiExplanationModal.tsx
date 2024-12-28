@@ -61,14 +61,14 @@ const GeminiExplanationModal: React.FC<GeminiExplanationModalProps> = ({
       size="xl"
     >
       <DialogBackdrop />
-      <DialogTrigger>
-        <Tooltip
-          content="Ask Gemini"
-          showArrow
-          openDelay={100}
-          closeDelay={250}
-          positioning={{ placement: "right", offset: { mainAxis: 3 } }}
-        >
+      <Tooltip
+        content="Ask Gemini"
+        showArrow
+        openDelay={100}
+        closeDelay={250}
+        positioning={{ placement: "right", offset: { mainAxis: 3 } }}
+      >
+        <DialogTrigger asChild>
           <IconButton
             variant="ghost"
             aria-label="Gemini Icon Button"
@@ -82,8 +82,8 @@ const GeminiExplanationModal: React.FC<GeminiExplanationModalProps> = ({
               width={25}
             />
           </IconButton>
-        </Tooltip>
-      </DialogTrigger>
+        </DialogTrigger>
+      </Tooltip>
       <DialogContent>
         <DialogCloseTrigger />
         <DialogHeader>

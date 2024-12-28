@@ -117,7 +117,7 @@ const UpdatePasswordModal: React.FC<UpdatePasswordModalProps> = ({
           />
         </DialogBody>
         <DialogFooter>
-          <DialogActionTrigger>
+          <DialogActionTrigger asChild>
             <Button variant="outline">Cancel</Button>
           </DialogActionTrigger>
           <Button onClick={handleUpdatePassword}>Update</Button>

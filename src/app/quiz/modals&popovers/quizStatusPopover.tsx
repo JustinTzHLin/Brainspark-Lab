@@ -30,23 +30,23 @@ const QuizStatusPopover: React.FC<QuizStatusPopoverProps> = ({
       onOpenChange={(e) => setQuestionStatusIsOpen(e.open)}
     >
       <PopoverTrigger>
-        <Tooltip
-          content="Quiz Status"
-          showArrow
-          openDelay={100}
-          closeDelay={250}
-          positioning={{ placement: "left", offset: { mainAxis: 3 } }}
+        <IconButton
+          aria-label="Quiz Status"
+          variant="ghost"
+          rounded="full"
+          _active={{ transform: "scale(0.8)" }}
+          aspectRatio={1}
         >
-          <IconButton
-            aria-label="Quiz Status"
-            variant="ghost"
-            rounded="full"
-            _active={{ transform: "scale(0.8)" }}
-            aspectRatio={1}
+          <Tooltip
+            content="Quiz Status"
+            showArrow
+            openDelay={100}
+            closeDelay={250}
+            positioning={{ placement: "left", offset: { mainAxis: 10 } }}
           >
             <LuInfo />
-          </IconButton>
-        </Tooltip>
+          </Tooltip>
+        </IconButton>
       </PopoverTrigger>
       <PopoverContent textAlign="left" w="416px">
         <PopoverArrow />

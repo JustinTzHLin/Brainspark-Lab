@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Box, Flex, Text, Stack } from "@chakra-ui/react";
 import { Button } from "@/components/ui/button";
 import { Blockquote } from "@/components/ui/blockquote";
@@ -13,7 +14,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { QuestionModalObjProps } from "../components/triviaRecords";
+import { QuestionModalObjProps } from "../components/recordsQuestions";
 import he from "he";
 import { shuffleArray } from "@/utils/globalHandlers";
 
@@ -28,24 +29,29 @@ const RecordsQuestionModal: React.FC<RecordsQuestionModalProps> = ({
   setQuestionModalIsOpen,
   questionModalObj,
 }) => {
-  const optionsArray = shuffleArray(
-    questionModalObj.incorrect_answer.concat([questionModalObj.correct_answer])
-  );
+  const [optionsArray, setOptionsArray] = useState<string[]>([]);
+
+  useEffect(() => {
+    setOptionsArray(
+      shuffleArray([
+        questionModalObj.correct_answer,
+        ...questionModalObj.incorrect_answer,
+      ])
+    );
+  }, [questionModalObj]);
 
   return (
     <DialogRoot
       open={questionModalIsOpen}
       onOpenChange={(e) => setQuestionModalIsOpen(e.open)}
       placement="center"
+      lazyMount
     >
       <DialogBackdrop />
       <DialogContent>
         <DialogCloseTrigger />
-        <DialogHeader>
-          {/* <DialogTitle>Quiz Score</DialogTitle> */}
-        </DialogHeader>
         <DialogBody>
-          <Stack>
+          <Stack mt={8}>
             <Blockquote pr={0} mb={6} fontSize={20} variant="solid">
               <b>{he.decode(questionModalObj.content)}</b>
             </Blockquote>
@@ -59,13 +65,13 @@ const RecordsQuestionModal: React.FC<RecordsQuestionModalProps> = ({
                 </Flex>
               ))}
               <Flex mt={6}>
-                Correct Answer:&nbsp;
+                <Text w={36}>Correct Answer:&nbsp;</Text>
                 <Text fontWeight="semibold">
                   {questionModalObj.correct_answer}
                 </Text>
               </Flex>
               <Flex>
-                Your Answer:&nbsp;
+                <Text w={36}>Your Answer:&nbsp;</Text>
                 <Text fontWeight="semibold">
                   {questionModalObj.user_answer}
                 </Text>
@@ -74,7 +80,7 @@ const RecordsQuestionModal: React.FC<RecordsQuestionModalProps> = ({
           </Stack>
         </DialogBody>
         <DialogFooter>
-          <DialogActionTrigger>
+          <DialogActionTrigger asChild>
             <Button variant="subtle">Cancel</Button>
           </DialogActionTrigger>
         </DialogFooter>

@@ -1,4 +1,4 @@
-import { Stack, Icon, Center, Flex } from "@chakra-ui/react";
+import { Stack, Center, Flex } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { Checkbox } from "@/components/ui/checkbox";
 import { BsUiRadios } from "react-icons/bs";
@@ -25,9 +25,7 @@ const QuestionTypeCheckbox: React.FC<QuestionTypeCheckboxProps> = ({
           borderBottomRightRadius={0}
           borderRightWidth={0}
         >
-          <Icon boxSize={5}>
-            <BsUiRadios />
-          </Icon>
+          <BsUiRadios size={20} />
         </Center>
         <Center
           w="calc(100% - 2.5rem)"

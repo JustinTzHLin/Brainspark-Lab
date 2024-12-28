@@ -42,7 +42,7 @@ const SubmitAnswerModal: React.FC<SubmitAnswerModalProps> = ({
           turning back!
         </DialogBody>
         <DialogFooter>
-          <DialogActionTrigger>
+          <DialogActionTrigger asChild>
             <Button variant="subtle">Nah</Button>
           </DialogActionTrigger>
           <Button onClick={() => checkAnswers()} ml={3}>

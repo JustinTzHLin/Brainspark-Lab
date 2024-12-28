@@ -1,4 +1,4 @@
-import { Flex, Stack, Icon, Center } from "@chakra-ui/react";
+import { Flex, Stack, Center } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { Radio, RadioGroup } from "@/components/ui/radio";
 import { PiGaugeBold } from "react-icons/pi";
@@ -24,9 +24,7 @@ const DifficultyRadio: React.FC<DifficultyRadioProps> = ({
           borderBottomRightRadius={0}
           borderRightWidth={0}
         >
-          <Icon boxSize={5}>
-            <PiGaugeBold />
-          </Icon>
+          <PiGaugeBold size={20} />
         </Center>
         <Center
           w="calc(100% - 2.5rem)"

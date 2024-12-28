@@ -36,7 +36,7 @@ const History = () => {
     created_at: "",
     last_visited: "",
   });
-  const [userHistory, setUserHistory] = useState({});
+  const [userHistory, setUserHistory] = useState([]);
   const [recordsType, setRecordsType] = useState("quizzes"); // quizzes, questions
   const [tabType, setTabType] = useState("records"); // records, charts
 
