@@ -7,27 +7,33 @@ interface PwdInputProps {
   setPassword: (nextValue: string) => void;
   isPasswordEmpty: boolean;
   setPasswordEmpty: (nextValue: boolean) => void;
+  passwordLabel?: string;
+  placeholder?: string;
+  autoFocus?: boolean;
 }
 
 const PwdInput: React.FC<PwdInputProps> = ({
   setPassword,
   isPasswordEmpty,
   setPasswordEmpty,
+  passwordLabel = "Password",
+  placeholder = "secret password",
+  autoFocus = true,
 }) => {
   return (
     <Field
       mt={6}
       required
       invalid={isPasswordEmpty}
-      label="Password"
+      label={passwordLabel}
       errorText="Password is required."
     >
       <InputGroup startElement={<LuLock size={16} color="black" />} w="full">
         <PasswordInput
-          placeholder="secret password"
+          placeholder={placeholder}
           onChange={(e) => setPassword(e.currentTarget.value)}
           onFocus={() => setPasswordEmpty(false)}
-          autoFocus
+          autoFocus={autoFocus}
         />
       </InputGroup>
     </Field>

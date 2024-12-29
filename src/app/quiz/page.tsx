@@ -1,12 +1,14 @@
 "use client";
-import React, { useRef, useState } from "react";
+import { useState } from "react";
 import { useAppSelector } from "@/lib/hooks";
 import { Flex, Box } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
+import Navbar from "@/components/navbar";
 import QuizHeader from "./components/quizHeader";
 import QuizContent from "./components/quizContent";
 import SubmitAnswerModal from "./modals&popovers/submitAnswerModal";
 import AnswerResultModal from "./modals&popovers/answerResultModal";
+import { shuffleArray } from "@/utils/globalHandlers";
 
 const Quiz = () => {
   /*  Quiz Example
@@ -32,15 +34,6 @@ const Quiz = () => {
   const [buttonBorderColor, setButtonBorderColor] = useState(
     Array(4).fill("0px 0px 0px 0px #18181b inset")
   );
-
-  // Shuffle options array
-  const shuffleArray = (array: string[]) => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  };
   const [options, setOptions] = useState(
     shuffleArray(
       quiz.correct_answer
@@ -58,7 +51,6 @@ const Quiz = () => {
   }>({ correctAnswer: "", incorrectAnswers: ["", "", "", ""] });
   const [geminiContentSuccess, setGeminiContentSuccess] = useState(false);
   const [submitAnswerIsOpen, setSubmitAnswerIsOpen] = useState(false);
-  const cancelSubmitAnswerRef = useRef<null | HTMLButtonElement>(null);
   const [checkAnswer, setCheckAnswer] = useState(false);
   const [geminiModalIsOpen, setGeminiModalIsOpen] = useState(false);
 
@@ -181,47 +173,54 @@ const Quiz = () => {
   };
 
   return (
-    <Flex width="full" align="center" justifyContent="center" h="100vh">
-      <Box p={8} maxW="full" borderWidth={1} borderRadius={8} boxShadow="md">
-        <QuizHeader
-          askGemini={askGemini}
-          geminiModalIsOpen={geminiModalIsOpen}
-          handleGeminiModalClose={handleGeminiModalClose}
-          geminiContentSuccess={geminiContentSuccess}
-          geminiContentObj={geminiContentObj}
-          quiz={quiz}
-          quizIndex={quizIndex}
+    <Box>
+      <Navbar />
+      <Flex
+        width="full"
+        align="center"
+        justifyContent="center"
+        h="calc(100vh - 63px)"
+      >
+        <Box p={8} maxW="full" borderWidth={1} borderRadius={8} boxShadow="md">
+          <QuizHeader
+            askGemini={askGemini}
+            geminiModalIsOpen={geminiModalIsOpen}
+            handleGeminiModalClose={handleGeminiModalClose}
+            geminiContentSuccess={geminiContentSuccess}
+            geminiContentObj={geminiContentObj}
+            quiz={quiz}
+            quizIndex={quizIndex}
+            questionNumber={questionNumber}
+            userAnswers={userAnswers}
+            handleChangeQuestion={handleChangeQuestion}
+          />
+          <QuizContent
+            quizIndex={quizIndex}
+            quiz={quiz}
+            buttonBorderColor={buttonBorderColor}
+            options={options}
+            selectOption={selectOption}
+            handleChangeQuestion={handleChangeQuestion}
+          />
+        </Box>
+
+        {/* Submit Answer Modal */}
+        <SubmitAnswerModal
+          submitAnswerIsOpen={submitAnswerIsOpen}
+          setSubmitAnswerIsOpen={setSubmitAnswerIsOpen}
+          checkAnswers={checkAnswers}
+        />
+
+        {/* Answer Result Modal */}
+        <AnswerResultModal
+          checkAnswer={checkAnswer}
+          setCheckAnswer={setCheckAnswer}
+          router={router}
           questionNumber={questionNumber}
-          userAnswers={userAnswers}
-          handleChangeQuestion={handleChangeQuestion}
+          correctCount={correctCount}
         />
-        <QuizContent
-          quizIndex={quizIndex}
-          quiz={quiz}
-          buttonBorderColor={buttonBorderColor}
-          options={options}
-          selectOption={selectOption}
-          handleChangeQuestion={handleChangeQuestion}
-        />
-      </Box>
-
-      {/* Submit Answer Modal */}
-      <SubmitAnswerModal
-        submitAnswerIsOpen={submitAnswerIsOpen}
-        setSubmitAnswerIsOpen={setSubmitAnswerIsOpen}
-        cancelSubmitAnswerRef={cancelSubmitAnswerRef}
-        checkAnswers={checkAnswers}
-      />
-
-      {/* Answer Result Modal */}
-      <AnswerResultModal
-        checkAnswer={checkAnswer}
-        setCheckAnswer={setCheckAnswer}
-        router={router}
-        questionNumber={questionNumber}
-        correctCount={correctCount}
-      />
-    </Flex>
+      </Flex>
+    </Box>
   );
 };
 

@@ -7,12 +7,17 @@ export interface loginState {
     loggedIn: boolean;
     isLoadingModalOpen: boolean;
   };
+  // userInformation: {
+  //   email: string;
+  //   username: string;
+  //   password: string;
+  // };
 }
 
 const initialState: loginState = {
   userAccess: {
     currentAction: "login", // login || signup
-    currentStatus: "email_input", // email_input || password_inut || initial_registration
+    currentStatus: "email_input", // email_input || password_input || initial_registration
     loggedIn: false,
     isLoadingModalOpen: true,
   },

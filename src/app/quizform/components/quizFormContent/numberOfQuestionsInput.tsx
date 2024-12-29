@@ -1,4 +1,4 @@
-import { Flex, Icon, Center } from "@chakra-ui/react";
+import { Flex, Center } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import {
   NumberInputField,
@@ -28,9 +28,7 @@ const NumberOfQuestionsInput: React.FC<NNumberOfQuestionsInputProps> = ({
           borderBottomRightRadius={0}
           borderRightWidth={0}
         >
-          <Icon boxSize={5}>
-            <RiNumbersFill />
-          </Icon>
+          <RiNumbersFill size={20} />
         </Center>
         <NumberInputRoot
           mr="1.5rem"

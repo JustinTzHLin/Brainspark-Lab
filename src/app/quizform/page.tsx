@@ -6,6 +6,7 @@ import { Flex, Box, Heading, IconButton } from "@chakra-ui/react";
 import { LuUserCircle } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import Navbar from "@/components/navbar";
 import QuizFormContent from "./components/quizFormContent";
 
 const QuizForm = () => {
@@ -59,34 +60,43 @@ const QuizForm = () => {
   };
 
   return (
-    <Flex w="full" align="center" justifyContent="center" h="100vh">
-      <Box p={8} maxW="full" borderWidth={1} borderRadius={8} boxShadow="md">
-        <Flex w="full" align="center" justifyContent="space-between">
-          <Box w="2.5rem"></Box>
-          <Heading size="3xl">Quiz Option</Heading>
-          <IconButton
-            aria-label="Profile Button"
-            variant="ghost"
-            rounded="full"
-            onClick={() => router.push("/profile")}
-          >
-            <LuUserCircle />
-          </IconButton>
-        </Flex>
+    <Box>
+      <Navbar />
+      <Flex
+        w="full"
+        align="center"
+        justifyContent="center"
+        h="calc(100vh - 63px)"
+      >
+        <Box p={10} maxW="full" borderWidth={1} borderRadius={8} boxShadow="md">
+          <Flex w="full" align="center" justifyContent="space-between">
+            <Box w="2.5rem"></Box>
+            <Heading size="3xl">Quiz Option</Heading>
+            <IconButton
+              aria-label="Profile Button"
+              variant="ghost"
+              rounded="full"
+              onClick={() => router.push("/profile")}
+              _active={{ transform: "scale(0.9)" }}
+            >
+              <LuUserCircle />
+            </IconButton>
+          </Flex>
 
-        {/* Quiz Form Content */}
-        <QuizFormContent
-          questionNumber={questionNumber}
-          setQuestionNumber={setQuestionNumber}
-          setCategory={setCategory}
-          difficulty={difficulty}
-          setDifficulty={setDifficulty}
-          handleStartQuiz={handleStartQuiz}
-          questionTypes={questionTypes}
-          setQuestionTypes={setQuestionTypes}
-        />
-      </Box>
-    </Flex>
+          {/* Quiz Form Content */}
+          <QuizFormContent
+            questionNumber={questionNumber}
+            setQuestionNumber={setQuestionNumber}
+            setCategory={setCategory}
+            difficulty={difficulty}
+            setDifficulty={setDifficulty}
+            handleStartQuiz={handleStartQuiz}
+            questionTypes={questionTypes}
+            setQuestionTypes={setQuestionTypes}
+          />
+        </Box>
+      </Flex>
+    </Box>
   );
 };
 

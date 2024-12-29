@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Box, Text, Link, Center } from "@chakra-ui/react";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,7 @@ import axios from "axios";
 import EmailInput from "./formContent/emailInput";
 import PwdInput from "./formContent/pwdInput";
 import UsernameInput from "./formContent/usernameInput";
-import SignupConfirmModal from "../modals/signupConfirmModel";
+import SignupConfirmModal from "../modals/signupConfirmModal";
 import { useAppSelector } from "@/lib/hooks";
 import { useAppDispatch } from "@/lib/hooks";
 import validator from "validator";
@@ -33,7 +33,6 @@ const FormContent = () => {
   const searchParamas = useSearchParams();
 
   const [signupConfirmIsOpen, setSignupConfirmIsOpen] = useState(false);
-  const cancelSignupConfirmRef = useRef<null | HTMLButtonElement>(null);
 
   useEffect(() => {
     const token = searchParamas.get("token");
@@ -46,7 +45,8 @@ const FormContent = () => {
       dispatch,
       replaceStatus,
       replaceAction,
-      replaceIsLoadingModalOpen
+      replaceIsLoadingModalOpen,
+      "/quizform"
     );
   }, [BACKEND_URL, dispatch, router, searchParamas]);
 
@@ -83,7 +83,7 @@ const FormContent = () => {
                 setBtnIsLoading(false);
                 toaster.create({
                   title: "The email doesn't belong to any account.",
-                  description: <p>Please sign up first.</p>,
+                  description: "Please sign up first.",
                   type: "warning",
                   duration: 3000,
                 });
@@ -94,7 +94,7 @@ const FormContent = () => {
                 setBtnIsLoading(false);
                 toaster.create({
                   title: "The email already belongs to an account.",
-                  description: <p>Please try to login.</p>,
+                  description: "Please try to login.",
                   type: "warning",
                   duration: 3000,
                 });
@@ -108,7 +108,7 @@ const FormContent = () => {
             setBtnIsLoading(false);
             toaster.create({
               title: "Email Not Valid",
-              description: <p>Please enter a valid email.</p>,
+              description: "Please enter a valid email.",
               type: "warning",
               duration: 3000,
             });
@@ -276,7 +276,6 @@ const FormContent = () => {
               ? "Already have an account? "
               : "Don’t have an account? "}
             <Link
-              variant="underline"
               onClick={() => {
                 dispatch(
                   replaceAction(currentAction === "signup" ? "login" : "signup")
@@ -293,7 +292,6 @@ const FormContent = () => {
         <SignupConfirmModal
           SignupConfirmIsOpen={signupConfirmIsOpen}
           setSignupConfirmIsOpen={setSignupConfirmIsOpen}
-          cancelSignupConfirmRef={cancelSignupConfirmRef}
           email={email}
         />
       </form>

@@ -1,4 +1,5 @@
 import {
+  DialogActionTrigger,
   DialogBackdrop,
   DialogBody,
   DialogCloseTrigger,
@@ -15,14 +16,12 @@ import { replaceAction } from "@/lib/features/loginSlice";
 interface SignupConfirmModalProps {
   SignupConfirmIsOpen: boolean;
   setSignupConfirmIsOpen: (arg0: boolean) => void;
-  cancelSignupConfirmRef: any;
   email: string;
 }
 
 const SignupConfirmModal: React.FC<SignupConfirmModalProps> = ({
   SignupConfirmIsOpen,
   setSignupConfirmIsOpen,
-  cancelSignupConfirmRef,
   email,
 }) => {
   const dispatch = useAppDispatch();
@@ -47,13 +46,9 @@ const SignupConfirmModal: React.FC<SignupConfirmModalProps> = ({
           email to activate your account and start enjoying Trivioasis.
         </DialogBody>
         <DialogFooter>
-          <Button
-            ref={cancelSignupConfirmRef}
-            onClick={() => setSignupConfirmIsOpen(false)}
-            variant="subtle"
-          >
-            Ok
-          </Button>
+          <DialogActionTrigger asChild>
+            <Button variant="subtle">Ok</Button>
+          </DialogActionTrigger>
         </DialogFooter>
       </DialogContent>
     </DialogRoot>
