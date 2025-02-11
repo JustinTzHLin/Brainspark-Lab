@@ -1,21 +1,21 @@
-# Brainspark-Lab
+# Trvioasis
 
-This is the frontend repository of Brainspark-Lab. To view the backend, please visit [here](https://github.com/JustinTzHLin/Brainspark-Lab-Backend).
+Explore Your Oasis of Knowledge.
 
 ## Table of Contents
 
-1. [About](#about-brainspark-lab)
+1. [About](#about-trivioasis)
 2. [How it Works](#how-it-works)
-3. [Getting Started](#getting-started-with-brainspark-lab)
+3. [Getting Started](#getting-started-with-trivioasis)
 4. [License](#license)
 
-## About Brainspark-Lab
+## About Trvioasis
 
-Make it easy and relaxing to gain new knowledge.
+Trvioasis is a trivia app where you can easily quench your thirst for knowledge. Explore a desert of questions and find your oasis of facts. Challenge yourself and learn something new every day, in a relaxed and enjoyable way.
 
 ## How it Works
 
-Brainspark-Lab is built with:
+Trvioasis is built with:
 
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://www.javascript.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -30,9 +30,9 @@ Brainspark-Lab is built with:
 [![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)](https://jwt.io/)
 [![Gemini](https://img.shields.io/badge/Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white)](https://gemini.google.com/)
 
-## Getting Started With Brainspark-Lab
+## Getting Started With Trvioasis
 
-Visit https://brainspark-lab.vercel.app/ and have fun!
+Visit https://trivioasis.vercel.app/ and have fun!
 
 ## License
 
